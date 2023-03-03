@@ -15,7 +15,7 @@ active[NUM_WAITERS] proctype Waiter() {
   :: mutex_lock() ->
      num_signals_req++;
      printf("T%d calls cv_wait()\n", _pid);
-     cv_wait();
+     cv_wait(); /*@\label{line:condvar:lostwaiter}@*/
      printf("T%d returns from cv_wait()\n", _pid);
      mutex_unlock()
   :: break
@@ -25,27 +25,24 @@ active[NUM_WAITERS] proctype Waiter() {
 
 active proctype Signaller() {
   do
-  :: num_signals_req > 0 ->
-     mutex_lock();
+  :: num_signals_req > 0 -> /*@\label{line:condvar:signalrequired}@*/
+     mutex_lock(); /*@\label{line:condvar:mustsignalstart}@*/
      printf("T%d must signal, num_signals_req=%d\n", _pid, num_signals_req);
      cv_signal();
      num_signals_req--;
-     mutex_unlock()
-  :: else ->
+     mutex_unlock() /*@\label{line:condvar:mustsignalend}@*/
+  :: else -> /*@\label{line:condvar:nosignalrequired}@*/
      if
-     :: true ->
-        mutex_lock();
+     :: true -> /*@\label{line:condvar:nondet1}@*/
+        mutex_lock(); /*@\label{line:condvar:choosestosignalstart}@*/
         printf("T%d signals without need\n", _pid);
         cv_signal();
+        num_signals_req = (num_signals_req > 0 -> num_signals_req - 1 : 0);
+        mutex_unlock() /*@\label{line:condvar:choosestosignalend}@*/
+     :: true -> printf("T%d won't signal until needed\n", _pid); /*@\label{line:condvar:nondet2}@*/
         if
-        :: num_signals_req > 0 -> num_signals_req--;
-        :: else
-        fi
-        mutex_unlock()
-     :: true -> printf("T%d won't signal until needed\n", _pid);
-        if
-        :: num_signals_req > 0 -> assert(num_done < NUM_WAITERS)
-        :: num_done == NUM_WAITERS -> assert(num_signals_req == 0); break
+        :: num_signals_req > 0 -> assert(num_done < NUM_WAITERS) /*@\label{line:condvar:signallerstuck}@*/
+        :: num_done == NUM_WAITERS -> assert(num_signals_req == 0); break /*@\label{line:condvar:alldone}@*/
         fi
      fi
   od
