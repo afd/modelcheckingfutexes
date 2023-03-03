@@ -11,8 +11,8 @@ byte num_threads_in_cs; // Number of threads in the critical section (CS)
 active [NUM_THREADS] proctype Thread() {
   do
   :: lock();
-     num_threads_in_cs = inc(num_threads_in_cs);
-     num_threads_in_cs = dec(num_threads_in_cs);
+     num_threads_in_cs++;
+     num_threads_in_cs--;
      unlock();
   :: printf("T%d is done\n", _pid) -> break
   od

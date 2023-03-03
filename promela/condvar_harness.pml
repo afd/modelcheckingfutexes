@@ -13,14 +13,14 @@ byte num_done; // Number of terminated waiter threads
 active[NUM_WAITERS] proctype Waiter() {
   do
   :: mutex_lock() ->
-     num_signals_req = inc(num_signals_req);
+     num_signals_req++;
      printf("T%d calls cv_wait()\n", _pid);
      cv_wait();
      printf("T%d returns from cv_wait()\n", _pid);
      mutex_unlock()
   :: break
   od
-  num_done = inc(num_done);
+  num_done++;
 }
 
 active proctype Signaller() {
@@ -29,7 +29,7 @@ active proctype Signaller() {
      mutex_lock();
      printf("T%d must signal, num_signals_req=%d\n", _pid, num_signals_req);
      cv_signal();
-     num_signals_req = dec(num_signals_req);
+     num_signals_req--;
      mutex_unlock()
   :: else ->
      if
@@ -38,7 +38,7 @@ active proctype Signaller() {
         printf("T%d signals without need\n", _pid);
         cv_signal();
         if
-        :: num_signals_req > 0 -> num_signals_req = dec(num_signals_req);
+        :: num_signals_req > 0 -> num_signals_req--;
         :: else
         fi
         mutex_unlock()

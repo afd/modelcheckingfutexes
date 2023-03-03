@@ -61,24 +61,24 @@ inline futex_wake(futex, num_to_wake) {
     :: num_woken == num_to_wake || futex.num_waiting == 0 ->
        break
     :: else ->
-      if
-      :: futex.wait[0] -> futex.wait[0] = false; printf("T%d wakes up T0\n", _pid)
-      :: futex.wait[1] -> futex.wait[1] = false; printf("T%d wakes up T1\n", _pid)
+       if
+       :: futex.wait[0] -> futex.wait[0] = false; printf("T%d wakes T0\n", _pid)
+       :: futex.wait[1] -> futex.wait[1] = false; printf("T%d wakes T1\n", _pid)
 #if NUM_THREADS > 2
-      :: futex.wait[2] -> futex.wait[2] = false; printf("T%d wakes up T2\n", _pid)
+       :: futex.wait[2] -> futex.wait[2] = false; printf("T%d wakes T2\n", _pid)
 #endif
 #if NUM_THREADS > 3
-      :: futex.wait[3] -> futex.wait[3] = false; printf("T%d wakes up T3\n", _pid)
+       :: futex.wait[3] -> futex.wait[3] = false; printf("T%d wakes T3\n", _pid)
 #endif
 #if NUM_THREADS > 4
-      :: futex.wait[4] -> futex.wait[4] = false; printf("T%d wakes up T4\n", _pid)
+       :: futex.wait[4] -> futex.wait[4] = false; printf("T%d wakes T4\n", _pid)
 #endif
 #if NUM_THREADS > 5
 #error "NUM_THREADS > 5, add more if branches in futex_wake"
 #endif
-      fi
-      futex.num_waiting--;
-      num_woken++;
+       fi
+       futex.num_waiting--;
+       num_woken++;
     od
     printf("T%d woke up %d thread(s)\n", _pid, num_woken);
     num_woken = 0; // Reset to avoid state space explosion
