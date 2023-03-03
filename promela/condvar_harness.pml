@@ -44,8 +44,8 @@ active proctype Signaller() {
         mutex_unlock()
      :: true -> printf("T%d won't signal until needed\n", _pid);
         if
-        :: num_signals_req > 0
-        :: num_done == NUM_WAITERS -> break
+        :: num_signals_req > 0 -> assert(num_done < NUM_WAITERS)
+        :: num_done == NUM_WAITERS -> assert(num_signals_req == 0); break
         fi
      fi
   od
