@@ -22,6 +22,7 @@ public:
       futex_wake(&futex_word, 1); /*@\label{line:drepper2:futexwake}@*/
     }
   }
+
 private:
   atomic<uint32_t> futex_word;
 };

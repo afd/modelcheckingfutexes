@@ -1,6 +1,6 @@
 #include <atomic>
-void futex_wait(std::atomic<uint32_t>*, int);
-void futex_wake(std::atomic<uint32_t>*, int);
+void futex_wait(std::atomic<uint32_t> *, int);
+void futex_wake(std::atomic<uint32_t> *, int);
 using std::atomic;
 
 class Mutex {
@@ -15,6 +15,7 @@ public:
     futex_word.store(0);
     futex_wake(&futex_word, 1);
   }
+
 private:
   atomic<uint32_t> futex_word;
 };

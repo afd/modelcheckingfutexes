@@ -9,12 +9,13 @@ using std::mutex;
 class CondVar {
 public:
   CondVar() : futex_word(0) {}
-  void cv_wait(mutex& m) {
+  void cv_wait(mutex &m) {
     m.unlock();
     futex_wait(&futex_word, 0);
     m.lock();
   }
   void cv_signal() { futex_wake(&futex_word, 1); }
+
 private:
   atomic<uint32_t> futex_word;
 };
