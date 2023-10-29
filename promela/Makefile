@@ -26,7 +26,7 @@
 ###############################################################################
 
 # Spin max depth when exploring the state space.
-MAXDEPTH=100000
+MAXDEPTH=1000000
 
 # Drepper mutex, version 1, 2 threads: no issue.
 drepper_mutex1_safe_cs_2threads:
@@ -62,3 +62,27 @@ condvar2_2threads:
 	spin -DNUM_THREADS=2 -search -noclaim -m$(MAXDEPTH) condvar2.pml
 	./pan -i condvar2.pml.trail
 	./pan -S condvar2.pml.trail
+
+# Musl mutex, version 1, 2 threads.
+musl_mutex1_safe_cs_2threads:
+	spin -DNUM_THREADS=2 -search -ltl safe_cs -m$(MAXDEPTH) musl_mutex1.pml
+musl_mutex1_endstates_2threads:
+	spin -DNUM_THREADS=2 -search -noclaim -m$(MAXDEPTH) musl_mutex1.pml
+
+# Musl mutex, version 1, 3 threads.
+musl_mutex1_safe_cs_3threads:
+	spin -DNUM_THREADS=3 -search -ltl safe_cs -m$(MAXDEPTH) musl_mutex1.pml
+musl_mutex1_endstates_3threads:
+	spin -DNUM_THREADS=3 -search -noclaim -m$(MAXDEPTH) musl_mutex1.pml
+
+# Musl mutex, version 2, 2 threads.
+musl_mutex2_safe_cs_2threads:
+	spin -DNUM_THREADS=2 -search -ltl safe_cs -m$(MAXDEPTH) musl_mutex2.pml
+musl_mutex2_endstates_2threads:
+	spin -DNUM_THREADS=2 -search -noclaim -m$(MAXDEPTH) musl_mutex2.pml
+
+# Musl mutex, version 2, 3 threads.
+musl_mutex2_safe_cs_3threads:
+	spin -DNUM_THREADS=3 -search -ltl safe_cs -m$(MAXDEPTH) musl_mutex2.pml
+musl_mutex2_endstates_3threads:
+	spin -DNUM_THREADS=3 -search -noclaim -m$(MAXDEPTH) musl_mutex2.pml
