@@ -6,7 +6,7 @@
 # LTL formula 'foobar', if the formula is not verified then a
 # myfile.pml.trail file is created, containing a counter-example:
 #
-#   spin -search -ltl foobar myfile.pml
+#   spin -search -a -ltl foobar myfile.pml
 #
 # Similar but check for invalid end-state, e.g. when not all threads
 # have terminated, but no more threads can make progress:
@@ -30,13 +30,13 @@ MAXDEPTH=1000000
 
 # Drepper mutex, version 1, 2 threads: no issue.
 drepper_mutex1_safe_cs_2threads:
-	spin -DNUM_THREADS=2 -search -ltl safe_cs -m$(MAXDEPTH) drepper_mutex1.pml
+	spin -DNUM_THREADS=2 -search -a -ltl safe_cs -m$(MAXDEPTH) drepper_mutex1.pml
 drepper_mutex1_endstates_2threads:
 	spin -DNUM_THREADS=2 -search -noclaim -m$(MAXDEPTH) drepper_mutex1.pml
 
 # Drepper mutex, version 1, 3 threads: overflowing issue shows up.
 drepper_mutex1_safe_cs_3threads:
-	spin -DNUM_THREADS=3 -search -ltl safe_cs -m$(MAXDEPTH) drepper_mutex1.pml
+	spin -DNUM_THREADS=3 -search -a -ltl safe_cs -m$(MAXDEPTH) drepper_mutex1.pml
 	./pan -i drepper_mutex1.pml.trail
 	./pan -S drepper_mutex1.pml.trail
 drepper_mutex1_endstates_3threads:
@@ -46,7 +46,7 @@ drepper_mutex1_endstates_3threads:
 
 # Drepper mutex, version 2, 3 threads: no issue.
 drepper_mutex2_safe_cs_3threads:
-	spin -DNUM_THREADS=3 -search -ltl safe_cs -m$(MAXDEPTH) drepper_mutex2.pml
+	spin -DNUM_THREADS=3 -search -a -ltl safe_cs -m$(MAXDEPTH) drepper_mutex2.pml
 drepper_mutex2_endstates_3threads:
 	spin -DNUM_THREADS=3 -search -noclaim -m$(MAXDEPTH) drepper_mutex2.pml
 
@@ -64,28 +64,25 @@ condvar2_2threads:
 	./pan -S condvar2.pml.trail
 
 # Musl mutex, version 1, 2 threads.
-musl_mutex1_safe_cs_2threads:
-	spin -DNUM_THREADS=2 -search -ltl safe_cs -m$(MAXDEPTH) musl_mutex1.pml
-musl_mutex1_endstates_2threads:
-	spin -DNUM_THREADS=2 -search -noclaim -m$(MAXDEPTH) musl_mutex1.pml
+gustedt_mutex1_safe_cs_2threads:
+	spin -DNUM_THREADS=2 -search -a -ltl safe_cs -m$(MAXDEPTH) gustedt_mutex1.pml
+gustedt_mutex1_endstates_2threads:
+	spin -DNUM_THREADS=2 -search -noclaim -m$(MAXDEPTH) gustedt_mutex1.pml
 
 # Musl mutex, version 1, 3 threads.
-musl_mutex1_safe_cs_3threads:
-	spin -DNUM_THREADS=3 -search -ltl safe_cs -m$(MAXDEPTH) musl_mutex1.pml
-musl_mutex1_endstates_3threads:
-	spin -DNUM_THREADS=3 -search -noclaim -m$(MAXDEPTH) musl_mutex1.pml
+gustedt_mutex1_safe_cs_3threads:
+	spin -DNUM_THREADS=3 -search -a -ltl safe_cs -m$(MAXDEPTH) gustedt_mutex1.pml
+gustedt_mutex1_endstates_3threads:
+	spin -DNUM_THREADS=3 -search -noclaim -m$(MAXDEPTH) gustedt_mutex1.pml
 
 # Musl mutex, version 2, 2 threads.
-musl_mutex2_safe_cs_2threads:
-	spin -DNUM_THREADS=2 -search -ltl safe_cs -m$(MAXDEPTH) musl_mutex2.pml
-musl_mutex2_endstates_2threads:
-	spin -DNUM_THREADS=2 -search -noclaim -m$(MAXDEPTH) musl_mutex2.pml
+gustedt_mutex2_safe_cs_2threads:
+	spin -DNUM_THREADS=2 -search -a -ltl safe_cs -m$(MAXDEPTH) gustedt_mutex2.pml
+gustedt_mutex2_endstates_2threads:
+	spin -DNUM_THREADS=2 -search -noclaim -m$(MAXDEPTH) gustedt_mutex2.pml
 
 # Musl mutex, version 2, 3 threads.
-musl_mutex2_safe_cs_3threads:
-	spin -DNUM_THREADS=3 -search -ltl safe_cs -m$(MAXDEPTH) musl_mutex2.pml
-musl_mutex2_endstates_3threads:
-	spin -DNUM_THREADS=3 -search -noclaim -m$(MAXDEPTH) musl_mutex2.pml
-
-musl_mutex1_safe_cs_4threads:
-	spin -DNUM_THREADS=4 -search -ltl safe_cs -m$(MAXDEPTH) musl_mutex1.pml
+gustedt_mutex2_safe_cs_3threads:
+	spin -DNUM_THREADS=3 -search -a -ltl safe_cs -m$(MAXDEPTH) gustedt_mutex2.pml
+gustedt_mutex2_endstates_3threads:
+	spin -DNUM_THREADS=3 -search -noclaim -m$(MAXDEPTH) gustedt_mutex2.pml
