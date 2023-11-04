@@ -86,3 +86,6 @@ musl_mutex2_safe_cs_3threads:
 	spin -DNUM_THREADS=3 -search -ltl safe_cs -m$(MAXDEPTH) musl_mutex2.pml
 musl_mutex2_endstates_3threads:
 	spin -DNUM_THREADS=3 -search -noclaim -m$(MAXDEPTH) musl_mutex2.pml
+
+musl_mutex1_safe_cs_4threads:
+	spin -DNUM_THREADS=4 -search -ltl safe_cs -m$(MAXDEPTH) musl_mutex1.pml

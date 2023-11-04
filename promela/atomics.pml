@@ -27,10 +27,3 @@ inline fetch_dec(location, result) {
     location = dec(location);
   }
 }
-
-// Convenience macro for overflowing addition that does not
-// return the previous value. Strictly this is not related to
-// atomics, but it is convenient to include it here since it is
-// used in conjunction with fetch_inc.
-#define inc(a)  (a == MAX_BYTE_VALUE -> 0 : a + 1)
-#define dec(a)  (a == 0 -> MAX_BYTE_VALUE : a - 1)
