@@ -2,13 +2,16 @@
 #define lock_bit_mask   (1 << 7)
 #define is_locked(w)    (lock_bit_mask & (w))
 #define set_locked(w)   (lock_bit_mask | (w))
-#define unlock_bit_mask (lock_bit_mask - 1)
-#define unset_locked(w) (unlock_bit_mask & (w))
+#define unset_locked(w) ((lock_bit_mask - 1) & (w))
 
 inline lockbit_fetch_inc(location, result) {
   d_step{
     result = location;
-    location = (unset_locked(location) == MAX_BYTE_VALUE -> 0 : location + 1)
+    if
+    :: unset_locked(location) == MAX_BYTE_VALUE ->
+       location = (is_locked(location) -> 0 : set_locked(0))
+    :: else -> location = location + 1
+    fi
   }
 }
 

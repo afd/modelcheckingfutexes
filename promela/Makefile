@@ -63,25 +63,25 @@ condvar2_2threads:
 	./pan -i condvar2.pml.trail
 	./pan -S condvar2.pml.trail
 
-# Musl mutex, version 1, 2 threads.
+# Gustedt mutex, version 1, 2 threads.
 gustedt_mutex1_safe_cs_2threads:
 	spin -DNUM_THREADS=2 -search -a -ltl safe_cs -m$(MAXDEPTH) gustedt_mutex1.pml
 gustedt_mutex1_endstates_2threads:
 	spin -DNUM_THREADS=2 -search -noclaim -m$(MAXDEPTH) gustedt_mutex1.pml
 
-# Musl mutex, version 1, 3 threads.
+# Gustedt mutex, version 1, 3 threads.
 gustedt_mutex1_safe_cs_3threads:
 	spin -DNUM_THREADS=3 -search -a -ltl safe_cs -m$(MAXDEPTH) gustedt_mutex1.pml
 gustedt_mutex1_endstates_3threads:
 	spin -DNUM_THREADS=3 -search -noclaim -m$(MAXDEPTH) gustedt_mutex1.pml
 
-# Musl mutex, version 2, 2 threads.
+# Gustedt mutex, version 2, 2 threads.
 gustedt_mutex2_safe_cs_2threads:
 	spin -DNUM_THREADS=2 -search -a -ltl safe_cs -m$(MAXDEPTH) gustedt_mutex2.pml
 gustedt_mutex2_endstates_2threads:
 	spin -DNUM_THREADS=2 -search -noclaim -m$(MAXDEPTH) gustedt_mutex2.pml
 
-# Musl mutex, version 2, 3 threads.
+# Gustedt mutex, version 2, 3 threads.
 gustedt_mutex2_safe_cs_3threads:
 	spin -DNUM_THREADS=3 -search -a -ltl safe_cs -m$(MAXDEPTH) gustedt_mutex2.pml
 gustedt_mutex2_endstates_3threads:

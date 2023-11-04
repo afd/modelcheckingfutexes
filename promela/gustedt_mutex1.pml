@@ -39,10 +39,9 @@ inline lock() {
        :: else
        fi
      }
-     // Busy wait loop, tmp is loop counter
      tmp = BUSYWAIT;
      cur = futex.word;
-     do
+     do // Busy wait loop, tmp is loop counter
      :: (tmp == 0) || !(is_locked(cur)) -> goto retry
      :: else -> tmp = tmp - 1; cur = futex.word
      od
