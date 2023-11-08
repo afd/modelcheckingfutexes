@@ -24,28 +24,30 @@
 
 // A Futex is the combination of a futex word and a wait list of threads.
 typedef Futex {
-  byte word; // Futex word
-  bool wait[NUM_THREADS]; // Wait list: array of bool indexed by thread IDs,
-                          // thread T is waiting iff wait[T] is true
-  byte num_waiting; // Number of threads currently waiting
+  // Futex word
+  byte word;
+  // Wait list: array of bool indexed by
+  // thread IDs; thread T is waiting iff
+  // wait[T] is true
+  bool wait[NUM_THREADS];
+  // Number of threads currently waiting
+  byte num_waiting;
 }
 
-// futex_wait implements the FUTEX_WAIT operation: the calling thread
-// goes to sleep only when the futex word equals the value argument.
+// futex_wait implements the FUTEX_WAIT operation: the calling thread goes to sleep only when the futex word equals the value argument.
 inline futex_wait(futex, val) {
   if
   :: d_step { /*@\label{line:futexwait:dstep1}@*/
        futex.word == val -> /*@\label{line:futexwait:wordequalval}@*/
-       printf("T%d futex_wait, value match: %d; sleep\n",
-              _pid, futex.word);
-       assert(!futex.wait[_pid]); // The thread must not be sleeping already
+       printf("T%d futex_wait, value match: %d; sleep\n", _pid, futex.word);
+       // The thread must not be sleeping already
+       assert(!futex.wait[_pid]);
        futex.wait[_pid] = true;
        futex.num_waiting++;
      }
      d_step { !futex.wait[_pid] -> printf("T%d has woken\n", _pid); } /*@\label{line:futexwait:dstep2}@*/
   :: d_step { /*@\label{line:futexwait:dstep3}@*/
-       else -> printf("T%d futex_wait, value mismatch: %d vs. %d; do not sleep\n",
-                      _pid, futex.word, val);
+       else -> printf("T%d futex_wait, value mismatch: %d vs. %d; do not sleep\n", _pid, futex.word, val);
      }
   fi
 }
@@ -58,20 +60,26 @@ inline futex_wake(futex, num_to_wake) {
     assert(!futex.wait[_pid]); // The waker must not be asleep
     byte num_woken = 0;
     do
-    :: num_woken == num_to_wake || futex.num_waiting == 0 ->
+    :: num_woken == num_to_wake
+         || futex.num_waiting == 0 ->
        break
     :: else ->
        if
-       :: futex.wait[0] -> futex.wait[0] = false; printf("T%d wakes T0\n", _pid)
-       :: futex.wait[1] -> futex.wait[1] = false; printf("T%d wakes T1\n", _pid)
+       :: futex.wait[0] -> futex.wait[0] = false;
+          printf("T%d wakes T0\n", _pid)
+       :: futex.wait[1] -> futex.wait[1] = false;
+          printf("T%d wakes T1\n", _pid)
 #if NUM_THREADS > 2
-       :: futex.wait[2] -> futex.wait[2] = false; printf("T%d wakes T2\n", _pid)
+       :: futex.wait[2] -> futex.wait[2] = false;
+          printf("T%d wakes T2\n", _pid)
 #endif
 #if NUM_THREADS > 3
-       :: futex.wait[3] -> futex.wait[3] = false; printf("T%d wakes T3\n", _pid)
+       :: futex.wait[3] -> futex.wait[3] = false;
+          printf("T%d wakes T3\n", _pid)
 #endif
 #if NUM_THREADS > 4
-       :: futex.wait[4] -> futex.wait[4] = false; printf("T%d wakes T4\n", _pid)
+       :: futex.wait[4] -> futex.wait[4] = false;
+          printf("T%d wakes T4\n", _pid)
 #endif
 #if NUM_THREADS > 5
 #error "NUM_THREADS > 5, add more if branches in futex_wake"

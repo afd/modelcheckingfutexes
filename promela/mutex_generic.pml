@@ -6,7 +6,8 @@
  * It also contains a generic LTL formula.
  */
 
-byte num_threads_in_cs; // Number of threads in the critical section (CS)
+// Number of threads in the critical section (CS)
+byte num_threads_in_cs;
 
 active [NUM_THREADS] proctype Thread() {
   do
@@ -18,4 +19,5 @@ active [NUM_THREADS] proctype Thread() {
   od
 }
 
-ltl safe_cs { [](num_threads_in_cs <= 1) } // Never more than one thread in CS
+// Never more than one thread in CS
+ltl safe_cs { [](num_threads_in_cs <= 1) }
