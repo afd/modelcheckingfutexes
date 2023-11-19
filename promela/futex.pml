@@ -60,8 +60,8 @@ inline futex_wake(futex, num_to_wake) {
     assert(!futex.wait[_pid]); // The waker must not be asleep
     byte num_woken = 0;
     do
-    :: num_woken == num_to_wake
-         || futex.num_waiting == 0 ->
+    :: num_woken == num_to_wake ||
+         futex.num_waiting == 0 ->
        break
     :: else ->
        if

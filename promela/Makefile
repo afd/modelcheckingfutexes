@@ -57,9 +57,17 @@ condvar1_2threads:
 	./pan -i condvar1.pml.trail
 	./pan -S condvar1.pml.trail
 
-# Condition variable, version 1: bug due to overflow.
+# Condition variable, version 2: bug due to overflow.
 condvar2_2threads:
 	spin -DNUM_THREADS=2 -search -noclaim -m$(MAXDEPTH) condvar2.pml
+	./pan -i condvar2.pml.trail
+	./pan -S condvar2.pml.trail
+
+# Condition variable, version 3: bug due to overflow, needs 3 threads.
+condvar3_2threads:
+	spin -DNUM_THREADS=2 -search -noclaim -m$(MAXDEPTH) condvar3.pml
+condvar3_3threads:
+	spin -DNUM_THREADS=3 -search -noclaim -m$(MAXDEPTH) condvar3.pml
 	./pan -i condvar2.pml.trail
 	./pan -S condvar2.pml.trail
 
