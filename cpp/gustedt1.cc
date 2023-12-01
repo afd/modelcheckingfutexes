@@ -1,9 +1,3 @@
-#include <atomic>
-void futex_wait(std::atomic<uint32_t> *, uint32_t);
-void futex_wake(std::atomic<uint32_t> *, uint32_t);
-uint32_t cmpxchg(std::atomic<uint32_t> &, uint32_t, uint32_t);
-using std::atomic;
-
 #define BUSYWAIT 10
 
 #define set_lock(VAL)  (0x80000000u | (VAL))
