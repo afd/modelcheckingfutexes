@@ -24,6 +24,10 @@ uint32_t cmpxchg(atomic<uint32_t> & futex_word, uint32_t expected, uint32_t desi
   return expected;
 }
 
+uint32_t xchg(atomic<uint32_t> & futex_word, uint32_t new_value) {
+  return futex_word.exchange(new_value);
+}
+
 #if MUTEX==1
 #include "drepper1.cc"
 #elif MUTEX==2
