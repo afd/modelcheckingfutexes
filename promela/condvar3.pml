@@ -4,7 +4,7 @@
  *
  *
  *
- *   spin -DNUM_THREADS=2 -search -noclaim -m100000 condvar3.pml
+ *   spin -DNUM_THREADS=2 -search -noclaim -m100000 -b condvar3.pml
  *
  */
 

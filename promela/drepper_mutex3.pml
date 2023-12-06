@@ -1,10 +1,10 @@
 /* Mutex, take 3 from the "Futexes Are Tricky" paper by U. Drepper.
  *
  * Test with 3 threads, checking critical section safety:
- *   spin -DNUM_THREADS=3 -search -ltl safe_cs -m100000 drepper_mutex3.pml
+ *   spin -DNUM_THREADS=3 -search -ltl safe_cs -m100000 -b drepper_mutex3.pml
  *
  * Test with 3 threads, checking for invalid end states:
- *   spin -DNUM_THREADS=3 -search -noclaim -m100000 drepper_mutex3.pml
+ *   spin -DNUM_THREADS=3 -search -noclaim -m100000 -b drepper_mutex3.pml
  */
 
 #include "futex.pml"

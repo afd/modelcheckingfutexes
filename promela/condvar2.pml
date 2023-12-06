@@ -2,7 +2,7 @@
 //
 // Bug due to overflow of futex word.
 //
-//   spin -DNUM_THREADS=2 -search -noclaim -m100000 condvar2.pml
+//   spin -DNUM_THREADS=2 -search -noclaim -m100000 -b condvar2.pml
 //   ./pan -S
 
 #include "futex.pml"
