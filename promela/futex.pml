@@ -22,13 +22,12 @@
 #error "NUM_THREADS must be in [2, INVALID_TID)"
 #endif
 
-// A Futex is the combination of a futex word and a wait list of threads.
+// A Futex is the combination of a futex word and a wait queue of threads.
 typedef Futex {
   // Futex word
   byte word;
-  // Wait list: array of bool indexed by
-  // thread IDs; thread T is waiting iff
-  // wait[T] is true
+  // Wait queue: array of bool indexed by thread IDs;
+  // thread T is waiting iff wait[T] is true
   bool wait[NUM_THREADS];
   // Number of threads currently waiting
   byte num_waiting;
@@ -39,13 +38,18 @@ inline futex_wait(futex, val) {
   if
   :: d_step { /*@\label{line:futexwait:dstep1}@*/
        futex.word == val -> /*@\label{line:futexwait:wordequalval}@*/
-       printf("T%d futex_wait, value match: %d; sleep\n", _pid, futex.word);
+       printf(
+         "T%d futex_wait, value match: %d; sleep\n",
+         _pid, futex.word);
        // The thread must not be sleeping already
        assert(!futex.wait[_pid]);
        futex.wait[_pid] = true;
        futex.num_waiting++;
      }
-     d_step { !futex.wait[_pid] -> printf("T%d has woken\n", _pid); } /*@\label{line:futexwait:dstep2}@*/
+     d_step { /*@\label{line:futexwait:dstep2}@*/
+       !futex.wait[_pid] ->
+       printf("T%d has woken\n", _pid);
+     }
   :: d_step { /*@\label{line:futexwait:dstep3}@*/
        else -> printf("T%d futex_wait, value mismatch: %d vs. %d; do not sleep\n", _pid, futex.word, val);
      }
@@ -57,7 +61,8 @@ inline futex_wait(futex, val) {
 // wakes them up.
 inline futex_wake(futex, num_to_wake) {
   atomic {
-    assert(!futex.wait[_pid]); // The waker must not be asleep
+    // The waker must not be asleep
+    assert(!futex.wait[_pid]);
     byte num_woken = 0;
     do
     :: num_woken == num_to_wake ||
@@ -88,7 +93,9 @@ inline futex_wake(futex, num_to_wake) {
        futex.num_waiting--;
        num_woken++;
     od
-    printf("T%d woke up %d thread(s)\n", _pid, num_woken);
-    num_woken = 0; // Reset to avoid state space explosion
+    printf("T%d woke up %d thread(s)\n",
+           _pid, num_woken);
+    // Reset to avoid state space explosion
+    num_woken = 0;
   }
 }
