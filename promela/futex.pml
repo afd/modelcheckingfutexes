@@ -82,7 +82,11 @@ inline futex_wake(futex, num_to_wake) {
           printf("T%d wakes T4\n", _pid)
 #endif
 #if NUM_THREADS > 5
-#error "NUM_THREADS > 5, add more if branches in futex_wake"
+       :: futex.wait[5] -> futex.wait[5] = false;
+          printf("T%d wakes T5\n", _pid)
+#endif
+#if NUM_THREADS > 6
+#error "NUM_THREADS > 6, add more if branches in futex_wake"
 #endif
        fi
        futex.num_waiting--;
