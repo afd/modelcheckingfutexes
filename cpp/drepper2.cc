@@ -1,10 +1,3 @@
-#include <atomic>
-void futex_wait(std::atomic<uint32_t> *, int);
-void futex_wake(std::atomic<uint32_t> *, int);
-uint32_t cmpxchg(std::atomic<uint32_t> &, uint32_t, uint32_t);
-
-using std::atomic;
-
 class Mutex {
 public:
   Mutex() : futex_word(0) {}

@@ -3,7 +3,7 @@
 // Bug due to bad design: futex_wake() can be called after, in wait(),
 // the mutex is unlocked, but before the call to futex_wait().
 //
-//   spin -DNUM_THREADS=2 -search -noclaim -m100000 condvar1.pml
+//   spin -DNUM_THREADS=2 -search -noclaim -m100000 -b condvar1.pml
 //   ./pan -S
 
 #include "atomics.pml"
