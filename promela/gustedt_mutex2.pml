@@ -63,7 +63,7 @@ inline lock() {
 }
 
 inline unlock() {
-  byte prev;
+  byte prev = 0;
   d_step {
     lockbit_fetch_unlock_and_dec(futex.word, prev);
     printf("T%d unlocks: set futex word from %d to %d\n", _pid, prev, futex.word);
@@ -72,6 +72,7 @@ inline unlock() {
   :: prev != set_locked(1) -> futex_wake(futex, 1)
   :: else
   fi
+  prev = 0;
 }
 
 /*****************************************************************************/
