@@ -13,7 +13,6 @@ PROMELA_SOURCES = [
 
 MAX_NUM_THREADS=6
 NUM_ITERATIONS=10
-# With 500000000, plan for 200 GiB of ram to be safe.
 DEPTH_LIMIT = 500000000
 
 CC = "gcc"
@@ -90,7 +89,7 @@ def run_safe_cs(promela_source, num_threads, num_iterations):
 # Main
 if not os.path.isdir(LOG_DIR):
     os.mkdir(LOG_DIR)
-for num_threads in range(4, MAX_NUM_THREADS+1):
+for num_threads in range(2, MAX_NUM_THREADS+1):
     for promela_source in PROMELA_SOURCES:
         generate_pan(promela_source, num_threads)
         run_noclaim(promela_source, num_threads, NUM_ITERATIONS)
