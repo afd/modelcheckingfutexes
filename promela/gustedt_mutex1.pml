@@ -8,10 +8,6 @@
 #include "atomics.pml"
 #include "lockbit.pml"
 
-#ifndef BUSYWAIT
-#define BUSYWAIT 2
-#endif
-
 Futex futex;
 
 inline lock() {
@@ -39,11 +35,10 @@ inline lock() {
        :: else
        fi
      }
-     tmp = BUSYWAIT;
      cur = futex.word;
-     do // Busy wait loop, tmp is loop counter
-     :: (tmp == 0) || !(is_locked(cur)) -> goto retry
-     :: else -> tmp = tmp - 1; cur = futex.word
+     do // Busy wait loop
+     :: is_locked(cur) -> cur = futex.word
+     :: true -> goto retry
      od
      goto retry
   :: else ->

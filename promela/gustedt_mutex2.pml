@@ -8,10 +8,6 @@
 #include "atomics.pml"
 #include "lockbit.pml"
 
-#ifndef BUSYWAIT
-#define BUSYWAIT 2
-#endif
-
 Futex futex;
 
 inline lock() {
@@ -26,11 +22,9 @@ inline lock() {
     fi
   }
 
-  byte count = BUSYWAIT;
-  do
-  :: count == 0 -> break
-  :: else ->
-     count = count - 1;
+  do // Busy wait loop
+  :: true -> break
+  :: true ->
      if
      :: is_locked(cur) -> cur = dec(unset_locked(cur));
      :: else
@@ -59,7 +53,7 @@ inline lock() {
      fi
   od
 
-  acquired_mutex: count = 0; prev = 0; cur = 0;
+  acquired_mutex: prev = 0; cur = 0;
 }
 
 inline unlock() {
