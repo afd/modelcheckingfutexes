@@ -41,7 +41,7 @@ def generate_pan(promela_source, num_threads):
 
 
 def compile_pan(no_claim):
-    cmd = [CC]
+    cmd = [CC, "-DSAFETY"]
     if no_claim:
         cmd += ["-DNOCLAIM"]
     cmd += COPT
@@ -49,13 +49,13 @@ def compile_pan(no_claim):
     run_cmd(cmd)
 
 
-def run_pan(pan_args, logfile):
+def run_pan(logfile):
     print(f'Log file: {logfile}')
     # -mXXX: set depth-limit to XXX
     # -b: error if depth-limit is exceeded
     # -x: do not overwrite an existing trail file, we use this to prevent pan
     #     from creating huge trail files.
-    run_cmd(["./pan", f"-m{DEPTH_LIMIT}", "-b", "-x"] + pan_args, logfile)
+    run_cmd(["./pan", f"-m{DEPTH_LIMIT}", "-b", "-x"], logfile)
 
 
 def logfilename(promela_source, num_threads, claim, iteration):
@@ -71,7 +71,7 @@ def run_noclaim(promela_source, num_threads, num_iterations):
     compile_pan(no_claim=True)
     for i in range(num_iterations):
         logfile = logfilename(promela_source, num_threads, 'noclaim', i)
-        run_pan([], logfile)
+        run_pan(logfile)
         if not check_depth_limit_error(logfile):
             print('Depth limit too low, skipping other runs')
             break
@@ -80,7 +80,7 @@ def run_safe_cs(promela_source, num_threads, num_iterations):
     compile_pan(no_claim=False)
     for i in range(num_iterations):
         logfile = logfilename(promela_source, num_threads, 'safe_cs', i)
-        run_pan(['-a'], logfile)
+        run_pan(logfile)
         if not check_depth_limit_error(logfile):
             print('Depth limit too low, skipping other runs')
             break
