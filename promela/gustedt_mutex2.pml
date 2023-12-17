@@ -1,8 +1,14 @@
 // Gustedt lock, musl version
+//
 // See https://git.musl-libc.org/cgit/musl/tree/src/thread/__lock.c?id=47d0bcd4762f223364e5b58d5a381aaa0cbd7c38
+//
 // The futex value is used for both:
 // - a flag (high-order bit) to indicate that lock is acquired
 // - a counter of congestion, i.e. number of threads in the CS
+//
+// Running checks, e.g. with 3 threads:
+//   spin -DNUM_THREADS=3 -search -ltl safe_cs gustedt_mutex2.pml
+//   spin -DNUM_THREADS=3 -search -noclaim gustedt_mutex2.pml
 
 #include "futex.pml"
 #include "atomics.pml"

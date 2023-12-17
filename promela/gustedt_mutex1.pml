@@ -1,8 +1,14 @@
 // Gustedt lock, research version
+//
 // See https://inria.hal.science/hal-01236734
+//
 // The futex value is used for both:
 // - a flag (high-order bit) to indicate that lock is acquired
 // - a counter of congestion, i.e. number of threads in the CS
+//
+// Running checks, e.g. with 3 threads:
+//   spin -DNUM_THREADS=3 -search -ltl safe_cs gustedt_mutex1.pml
+//   spin -DNUM_THREADS=3 -search -noclaim gustedt_mutex1.pml
 
 #include "futex.pml"
 #include "atomics.pml"
@@ -40,9 +46,9 @@ inline lock() {
        fi
      }
      cur = futex.word;
-     do // Busy wait loop
-     :: is_locked(cur) -> cur = futex.word
-     :: true -> goto retry
+     do // Busy wait loop /*@\label{line:gustedt1pml:busywaitloop}@*/
+     :: is_locked(cur) -> cur = futex.word  /*@\label{line:gustedt1pml:busywaitloopread}@*/
+     :: true -> goto retry  /*@\label{line:gustedt1pml:busywaitloopbreak}@*/
      od
      goto retry
   :: else ->
