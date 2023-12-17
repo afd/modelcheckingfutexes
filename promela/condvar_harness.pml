@@ -27,7 +27,8 @@ active proctype Signaller() {
   do
   :: num_signals_req > 0 -> /*@\label{line:condvar:signalrequired}@*/
      mutex_lock(); /*@\label{line:condvar:mustsignalstart}@*/
-     printf("T%d must signal, num_signals_req=%d\n", _pid, num_signals_req);
+     printf("T%d must signal, num_signals_req=%d\n",
+            _pid, num_signals_req);
      cv_signal();
      num_signals_req--;
      mutex_unlock() /*@\label{line:condvar:mustsignalend}@*/
@@ -37,12 +38,18 @@ active proctype Signaller() {
         mutex_lock(); /*@\label{line:condvar:choosestosignalstart}@*/
         printf("T%d signals without need\n", _pid);
         cv_signal();
-        num_signals_req = (num_signals_req > 0 -> num_signals_req - 1 : 0);
+        num_signals_req =
+          (num_signals_req > 0 -> num_signals_req - 1
+                                : 0);
         mutex_unlock() /*@\label{line:condvar:choosestosignalend}@*/
-     :: true -> printf("T%d won't signal until needed\n", _pid); /*@\label{line:condvar:nondet2}@*/
+     :: true ->  /*@\label{line:condvar:nondet2}@*/
+        printf("T%d won't signal until needed\n", _pid);
         if
-        :: num_signals_req > 0 -> assert(num_done < NUM_WAITERS) /*@\label{line:condvar:signallerstuck}@*/
-        :: num_done == NUM_WAITERS -> assert(num_signals_req == 0); break /*@\label{line:condvar:alldone}@*/
+        :: num_signals_req > 0 -> /*@\label{line:condvar:signallerstuck}@*/
+           assert(num_done < NUM_WAITERS)
+        :: num_done == NUM_WAITERS -> /*@\label{line:condvar:alldone}@*/
+           assert(num_signals_req == 0);
+           break
         fi
      fi
   od

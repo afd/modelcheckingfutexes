@@ -13,7 +13,7 @@
 
 Futex futex;
 
-byte cv_previous; // Additional state in condition variable
+byte cv_previous; // Additional state
 
 inline cv_wait() {
   cv_previous = futex.word;
@@ -25,7 +25,8 @@ inline cv_wait() {
 
 inline cv_signal() {
   futex.word = inc(cv_previous); /*@\label{line:condvar3:incprevious}@*/
-  printf("T%d sets futex.word to %d\n", _pid, futex.word);
+  printf("T%d sets futex.word to %d\n",
+         _pid, futex.word);
   futex_wake(futex, 1);
 }
 
