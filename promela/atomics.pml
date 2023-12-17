@@ -1,6 +1,5 @@
 // Atomic compare-exchange.
-inline cmpxchg(location, expected, desired, result)
-{
+inline cmpxchg(location, expected, desired, result) {
   d_step {
     result = location;
     location = (location == expected
