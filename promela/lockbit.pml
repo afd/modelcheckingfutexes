@@ -9,7 +9,8 @@ inline lockbit_fetch_inc(location, result) {
     result = location;
     if
     :: unset_locked(location) == MAX_BYTE_VALUE ->
-       location = (is_locked(location) -> 0 : set_locked(0))
+       location =
+         (is_locked(location) -> 0 : set_locked(0))
     :: else -> location = location + 1
     fi
   }
@@ -19,6 +20,6 @@ inline lockbit_fetch_unlock_and_dec(location, result) {
   d_step{
     result = location;
     location = unset_locked(location);
-    location = dec(location);
+    location = dec(location)
   }
 }

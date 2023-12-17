@@ -11,7 +11,8 @@ public:
     if (cur == 0) return; /*@\label{line:gustedt2:fastpathreturn}@*/
     for (uint32_t i = 0; i < BUSYWAIT; i++) { /*@\label{line:gustedt2:busywait}@*/
       if (is_locked(cur)) cur = unset_lock(cur) - 1; /*@\label{line:gustedt2:busywaitdec}@*/
-      uint32_t prev = cmpxchg(futex_word, cur, set_lock(cur+1)); /*@\label{line:gustedt2:busywaitcmpxchg}@*/
+      uint32_t prev =
+        cmpxchg(futex_word, cur, set_lock(cur+1)); /*@\label{line:gustedt2:busywaitcmpxchg}@*/
       if (prev == cur) return;
       cur = prev;
     }
@@ -21,7 +22,8 @@ public:
         futex_wait(&futex_word, cur);
         cur = unset_lock(cur) - 1;
       }
-      uint32_t prev = cmpxchg(futex_word, cur, set_lock(cur)); /*@\label{line:gustedt2:slowpathcmpxchg}@*/
+      uint32_t prev =
+        cmpxchg(futex_word, cur, set_lock(cur)); /*@\label{line:gustedt2:slowpathcmpxchg}@*/
       if (prev == cur) return; /*@\label{line:gustedt2:slowpathreturn}@*/
       cur = prev;
     }

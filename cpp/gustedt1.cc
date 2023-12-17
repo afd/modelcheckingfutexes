@@ -11,9 +11,12 @@ public:
     cur = futex_word.fetch_add(1) + 1; /*@\label{line:gustedt1:increment}@*/
     for (;;) { /*@\label{line:gustedt1:lockloop}@*/
       while (!is_locked(cur)) { /*@\label{line:gustedt1:subloop1}@*/
-        uint32_t prev = cmpxchg(futex_word, cur, set_lock(cur)); /*@\label{line:gustedt1:secondcmpxchg}@*/
+        uint32_t prev =
+          cmpxchg(futex_word, cur, set_lock(cur)); /*@\label{line:gustedt1:secondcmpxchg}@*/
         if (prev == cur) return; /*@\label{line:gustedt1:return}@*/
-        for (uint32_t i = 0; i < BUSYWAIT && is_locked(cur); i++) { /*@\label{line:gustedt1:busywait}@*/
+        for (uint32_t i = 0;
+             i < BUSYWAIT && is_locked(cur);
+             i++) { /*@\label{line:gustedt1:busywait}@*/
           cur = futex_word.load();
         }
       }

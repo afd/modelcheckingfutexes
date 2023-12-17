@@ -16,9 +16,12 @@ inline lock() {
   atomic {
     cmpxchg(futex.word, 0, set_locked(1), cur);
     if
-    :: cur == 0 -> printf("T%d locks mutex on fast path\n", _pid);
+    :: cur == 0 ->
+       printf("T%d locks mutex on fast path\n", _pid);
        goto acquired_mutex
-    :: else -> printf("T%d fails to lock mutex on fast path\n", _pid)
+    :: else ->
+       printf("T%d fails to lock mutex on fast path\n",
+              _pid)
     fi
   }
   lockbit_fetch_inc(futex.word, cur);
@@ -30,7 +33,8 @@ inline lock() {
      atomic {
        cmpxchg(futex.word, cur, set_locked(cur), tmp);
        if
-       :: cur == tmp -> printf("T%d locks mutex\n", _pid);
+       :: cur == tmp ->
+          printf("T%d locks mutex\n", _pid);
           goto acquired_mutex
        :: else
        fi
@@ -54,7 +58,9 @@ inline unlock() {
   byte prev = 0;
   d_step {
     lockbit_fetch_unlock_and_dec(futex.word, prev);
-    printf("T%d unlocks: set futex word from %d to %d\n", _pid, prev, futex.word);
+    printf(
+      "T%d unlocks: set futex word from %d to %d\n",
+      _pid, prev, futex.word);
   }
   if
   :: prev != set_locked(1) -> futex_wake(futex, 1)

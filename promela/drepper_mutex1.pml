@@ -23,8 +23,12 @@ inline lock() {
   :: atomic {
        fetch_inc(futex.word, old_value); /*@\label{line:drepper1:fetchinc}@*/
        if
-       :: old_value == 0 -> printf("T%d locks mutex\n", _pid); break
-       :: else -> printf("T%d lock fail, old_value: %d\n", _pid, old_value);
+       :: old_value == 0 ->
+          printf("T%d locks mutex\n", _pid);
+	  break
+       :: else ->
+          printf("T%d lock fail, old_value: %d\n",
+                 _pid, old_value);
        fi
      }
      futex_wait(futex, inc(old_value)) /*@\label{line:drepper1:futexwait}@*/
@@ -32,8 +36,11 @@ inline lock() {
 }
 
 inline unlock() {
-  d_step { futex.word = 0; printf("T%d unlocks mutex\n", _pid); }
-  futex_wake(futex, 1);
+  d_step {
+    futex.word = 0;
+    printf("T%d unlocks mutex\n", _pid)
+  }
+  futex_wake(futex, 1)
 }
 
 #include "mutex_generic.pml"
