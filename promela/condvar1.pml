@@ -14,9 +14,11 @@ Futex futex;
 inline cv_wait() {
   mutex_unlock(); /*@\label{line:condvar1:mutexunlock}@*/
   futex_wait(futex, 0); /*@\label{line:condvar1:futexwait}@*/
-  mutex_lock();
+  mutex_lock()
 }
 
-inline cv_signal() { futex_wake(futex, 1) }
+inline cv_signal() {
+  futex_wake(futex, 1)
+}
 
 #include "condvar_harness.pml"
