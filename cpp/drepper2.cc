@@ -5,9 +5,11 @@ public:
     uint32_t old_value;
     if ((old_value = cmpxchg(futex_word, 0, 1)) != 0) /*@\label{line:drepper2:firstcmpxchg}@*/
       do { /*@\label{line:drepper2:startofloop}@*/
-        if (old_value == 2 || cmpxchg(futex_word, 1, 2) != 0) /*@\label{line:drepper2:secondcmpxchg}@*/
+        if (old_value == 2 /*@\label{line:drepper2:checkoldvalue2}@*/
+             || cmpxchg(futex_word, 1, 2) != 0) /*@\label{line:drepper2:secondcmpxchg}@*/
           futex_wait(&futex_word, 2); /*@\label{line:drepper2:futexwait}@*/
-      } while ((old_value = cmpxchg(futex_word, 0, 2)) != 0); /*@\label{line:drepper2:thirdcmpxchg}@*/
+        old_value = cmpxchg(futex_word, 0, 2); /*@\label{line:drepper2:thirdcmpxchg}@*/
+      } while (old_value != 0);
   }
   void unlock() {
     if (futex_word.fetch_sub(1) != 1) { /*@\label{line:drepper2:fetchsub}@*/
