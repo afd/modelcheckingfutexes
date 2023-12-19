@@ -11,13 +11,13 @@ public:
   CondVar() : futex_word(0) {}
   void cv_wait(mutex &m) {
     previous.store(futex_word);
-    uint32_t val = previous;
+    uint32_t val = previous.load();
     m.unlock();
     futex_wait(&futex_word, val);
     m.lock();
   }
   void cv_signal() {
-    uint32_t val = 1 + previous;
+    uint32_t val = 1 + previous.load();
     futex_word.store(val);
     futex_wake(&futex_word, 1);
   }

@@ -2,8 +2,14 @@
 
 // Simple mutex: mutex == true iff it is locked.
 bool mutex;
-inline mutex_lock() {d_step{ !mutex -> mutex = true }}
-inline mutex_unlock() { mutex = false }
+inline mutex_lock() {
+  d_step {
+    !mutex -> mutex = true
+  }
+}
+inline mutex_unlock() {
+  mutex = false
+}
 
 // One thread is the signaler, the rest are waiters.
 #define NUM_WAITERS (NUM_THREADS - 1)
