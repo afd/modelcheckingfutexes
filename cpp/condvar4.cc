@@ -10,16 +10,19 @@ class CondVar {
 public:
   CondVar() : futex_word(0) {}
   void cv_wait(mutex &m) {
-    futex_word.store(1);
-    m.unlock(); /*@\label{line:condvar_toggle:mutexunlock}@*/
-    futex_wait(&futex_word, 1); /*@\label{line:condvar_toggle:futexwait}@*/
+    previous.store(futex_word);
+    uint32_t val = previous;
+    m.unlock();
+    futex_wait(&futex_word, val);
     m.lock();
   }
   void cv_signal() {
-    futex_word.store(0);
+    uint32_t val = 1 + previous;
+    futex_word.store(val);
     futex_wake(&futex_word, 1);
   }
 
 private:
   atomic<uint32_t> futex_word;
+  atomic<uint32_t> previous; // Additional state
 };

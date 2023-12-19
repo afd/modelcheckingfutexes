@@ -10,13 +10,13 @@ class CondVar {
 public:
   CondVar() : futex_word(0) {}
   void cv_wait(mutex &m) {
-    futex_word.store(1);
-    m.unlock(); /*@\label{line:condvar_toggle:mutexunlock}@*/
-    futex_wait(&futex_word, 1); /*@\label{line:condvar_toggle:futexwait}@*/
+    uint32_t old_value = futex_word; /*@\label{line:condvar2cpp:savefutexword}@*/
+    m.unlock(); /*@\label{line:condvar2cpp:mutexunlock}@*/
+    futex_wait(&futex_word, old_value); /*@\label{line:condvar2cpp:futexwait}@*/
     m.lock();
   }
   void cv_signal() {
-    futex_word.store(0);
+    futex_word.fetch_add(1);
     futex_wake(&futex_word, 1);
   }
 

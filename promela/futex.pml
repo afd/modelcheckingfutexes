@@ -51,7 +51,10 @@ inline futex_wait(futex, val) {
        printf("T%d has woken\n", _pid);
      }
   :: d_step { /*@\label{line:futexwait:dstep3}@*/
-       else -> printf("T%d futex_wait, value mismatch: %d vs. %d; do not sleep\n", _pid, futex.word, val);
+       else ->
+       printf(
+         "T%d futex_wait, value mismatch: %d vs. %d; do not sleep\n",
+         _pid, futex.word, val);
      }
   fi
 }

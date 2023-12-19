@@ -1,32 +1,24 @@
-/* Sequence counter, with condvar_previous
- *
- *
- *
- *
- *
- *   spin -DNUM_THREADS=2 -search -noclaim -m100000 -b condvar3.pml
- *
- */
+// Condition variable: "sequence counter, close but no cigar"
+//
+// Bug due to overflow of futex word.
+//
+//   spin -DNUM_THREADS=2 -search -noclaim -m100000 -b condvar2.pml
+//   ./pan -S
 
 #include "futex.pml"
 #include "atomics.pml"
 
 Futex futex;
 
-byte cv_previous; // Additional state
-
 inline cv_wait() {
-  cv_previous = futex.word;
-  byte val = cv_previous;
-  mutex_unlock(); /*@\label{line:condvar3:mutexunlock}@*/
-  futex_wait(futex, val); /*@\label{line:condvar3:futexwait}@*/
+  byte val = futex.word; /*@\label{line:condvar2:savefutexword}@*/
+  mutex_unlock(); /*@\label{line:condvar2:mutexunlock}@*/
+  futex_wait(futex, val); /*@\label{line:condvar2:futexwait}@*/
   mutex_lock();
 }
 
 inline cv_signal() {
-  futex.word = inc(cv_previous); /*@\label{line:condvar3:incprevious}@*/
-  printf("T%d sets futex.word to %d\n",
-         _pid, futex.word);
+  futex.word = inc(futex.word);
   futex_wake(futex, 1);
 }
 
