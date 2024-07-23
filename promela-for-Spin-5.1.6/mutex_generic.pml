@@ -27,10 +27,7 @@ proctype Thread() {
 active
 #endif
 proctype Monitor() {
-  do
-  :: assert(num_threads_in_cs <= 1);
-  :: else
-  od
+end:  num_threads_in_cs > 1 -> assert(false);
 }
 
 #ifdef __TOPSPIN__
