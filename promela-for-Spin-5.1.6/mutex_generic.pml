@@ -9,7 +9,10 @@
 // Number of threads in the critical section (CS)
 byte num_threads_in_cs;
 
-active [NUM_THREADS] proctype Thread() {
+#ifndef __TOPSPIN__
+active [NUM_THREADS]
+#endif
+proctype Thread() {
   byte num_woken = 0; // Used by "futex_wake"
   do
   :: lock();
@@ -20,11 +23,37 @@ active [NUM_THREADS] proctype Thread() {
   od
 }
 
-// Never more than one thread in CS
-never  {    /* [](num_threads_in_cs <= 1) */
-accept_init:
-T0_init:
-	do
-	:: ((num_threads_in_cs <= 1)) -> goto T0_init
-	od;
+#ifndef __TOPSPIN__
+active
+#endif
+proctype Monitor() {
+  do
+  :: assert(num_threads_in_cs <= 1);
+  :: else
+  od
 }
+
+#ifdef __TOPSPIN__
+init {
+  atomic {
+    run Thread();
+    run Thread();
+#if NUM_THREADS > 2
+    run Thread();
+#endif
+#if NUM_THREADS > 3
+    run Thread();
+#endif
+#if NUM_THREADS > 4
+    run Thread();
+#endif
+#if NUM_THREADS > 5
+    run Thread();
+#endif
+#if NUM_THREADS > 6
+#error "NUM_THREADS > 6 - edit macros to support more threads"
+#endif
+    run Monitor();
+  }
+}
+#endif

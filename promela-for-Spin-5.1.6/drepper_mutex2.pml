@@ -31,17 +31,17 @@ inline lock() {
        :: old_value_lock == 2
        :: else ->
           assert(old_value_lock == 1);
-          cmpxchg(futex.word, 1, 2, old_value_lock)
+          cmpxchg(futex.word, 1, 2, old_value_lock);
           if
           :: old_value_lock == 0 -> goto retry
           :: else
           fi
        fi
      }
-     futex_wait(futex, 2)        
+     futex_wait(futex, 2);
 retry:
      atomic {
-       cmpxchg(futex.word, 0, 2, old_value_lock)
+       cmpxchg(futex.word, 0, 2, old_value_lock);
        if
        :: old_value_lock == 0 ->
           printf("T%d locks mutex on slow path\n",
