@@ -35,7 +35,7 @@ inline lock() {
 
   retry: // Lock loop
   if
-  :: !(is_locked(cur)) ->
+  :: is_locked(cur) == 0 ->
      atomic {
        cmpxchg(futex.word, cur, set_locked(cur), tmp);
        if

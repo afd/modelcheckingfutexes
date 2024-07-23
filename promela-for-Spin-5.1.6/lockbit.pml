@@ -10,7 +10,7 @@ inline lockbit_fetch_inc(location, result) {
     if
     :: unset_locked(location) == MAX_BYTE_VALUE -> /*@\label{line:lockbitpml:overflow}@*/
        location =
-         (is_locked(location) -> 0 : set_locked(0))
+         (is_locked(location) != 0 -> 0 : set_locked(0))
     :: else -> location = location + 1
     fi
   }
