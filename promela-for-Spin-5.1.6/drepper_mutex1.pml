@@ -11,6 +11,7 @@
  *   ./pan -S -r drepper_mutex1.pml.trail
  */
 
+#include "num_threads_mutex.pml"
 #include "futex.pml"
 #include "atomics.pml"
 

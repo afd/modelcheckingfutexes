@@ -11,15 +11,13 @@ inline mutex_unlock() {
   mutex = false
 }
 
-// One thread is the signaler, the rest are waiters.
-#if NUM_WAITERS != (NUM_THREADS - 1)
-#error NUM_WAITERS must be defined, and must be (NUM_THREADS - 1)
-#endif
-
 byte num_signals_req; // Number of signals required
 byte num_done; // Number of terminated waiter threads
 
-active[NUM_WAITERS] proctype Waiter() {
+#ifndef __TOPSPIN__
+active [NUM_WAITERS]
+#endif
+proctype Waiter() {
   do
   :: mutex_lock() ->
      num_signals_req++;
@@ -32,7 +30,10 @@ active[NUM_WAITERS] proctype Waiter() {
   num_done++;
 }
 
-active proctype Signaller() {
+#ifndef __TOPSPIN__
+active
+#endif
+proctype Signaller() {
   byte num_woken = 0; // Used by "futex_wake"
   do
   :: num_signals_req > 0 -> /*@\label{line:condvar:signalrequired}@*/
@@ -64,3 +65,27 @@ active proctype Signaller() {
      fi
   od
 }
+
+#ifdef __TOPSPIN__
+init {
+  atomic {
+    run Waiter();
+#if NUM_WAITERS > 1
+    run Waiter();
+#endif
+#if NUM_WAITERS > 2
+    run Waiter();
+#endif
+#if NUM_WAITERS > 3
+    run Waiter();
+#endif
+#if NUM_WAITERS > 4
+    run Waiter();
+#endif
+#if NUM_WAITERS > 5
+#error "NUM_WAITERS > 6 - edit macros to support more threads"
+#endif
+    run Signaller();
+  }
+}
+#endif

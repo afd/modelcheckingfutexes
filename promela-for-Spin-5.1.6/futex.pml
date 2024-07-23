@@ -1,48 +1,5 @@
 // Futex specification. This file is meant to be #include'd.
 
-// Sentinel value for invalid thread ID.
-#define INVALID_TID 255
-
-// Total number of threads.
-//
-// Can be modified when calling spin, e.g. to run with 5 threads:
-//   spin -DNUM_THREADS=5 ...
-//
-// Various arrays are declared with a size equal to NUM_THREADS. These arrays
-// are indexed by the thread ID, i.e. the built-in `_pid` variable. Note that
-// this requires to declare threads with something like:
-//
-//   active [NUM_THREADS] proctype Thread() { ... }
-//
-// In particular, we should not have an `init` process, otherwise the init
-// process own _pid creates an offset in the _pid values of threads.
-#ifndef NUM_THREADS
-#define NUM_THREADS 2
-#elif (NUM_THREADS < 2) || (NUM_THREADS >= INVALID_TID)
-#error "NUM_THREADS must be in [2, INVALID_TID)"
-#endif
-
-#ifdef __TOPSPIN__
-
-#if NUM_THREADS == 2
-#define WAIT_SIZE 4
-#elif NUM_THREADS == 3
-#define WAIT_SIZE 5
-#elif NUM_THREADS == 4
-#define WAIT_SIZE 6
-#elif NUM_THREADS == 5
-#define WAIT_SIZE 7
-#elif NUM_THREADS == 6
-#define WAIT_SIZE 8
-#else
-#error "NUM_THREADS > 6 - edit macros to support more threads"
-#error
-#endif
-
-#else
-#define WAIT_SIZE NUM_THREADS
-#endif
-
 // A Futex is the combination of a futex word and a wait queue of threads.
 typedef Futex {
   // Futex word

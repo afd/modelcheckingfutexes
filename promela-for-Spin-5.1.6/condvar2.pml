@@ -12,6 +12,7 @@
  *
  */
 
+#include "num_threads_condvar.pml"
 #include "atomics.pml"
 #include "futex.pml"
 

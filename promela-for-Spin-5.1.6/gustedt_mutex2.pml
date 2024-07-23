@@ -10,6 +10,7 @@
 //   spin -DNUM_THREADS=3 -search -ltl safe_cs gustedt_mutex2.pml
 //   spin -DNUM_THREADS=3 -search -noclaim gustedt_mutex2.pml
 
+#include "num_threads_mutex.pml"
 #include "futex.pml"
 #include "atomics.pml"
 #include "lockbit.pml"

@@ -6,6 +6,7 @@
 //   spin -DNUM_THREADS=2 -search -noclaim -m100000 -b condvar1.pml
 //   ./pan -S
 
+#include "num_threads_condvar.pml"
 #include "atomics.pml"
 #include "futex.pml"
 

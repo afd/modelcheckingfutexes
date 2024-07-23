@@ -7,6 +7,7 @@
  *   spin -DNUM_THREADS=3 -search -noclaim -m100000 -b drepper_mutex3b.pml
  */
 
+#include "num_threads_mutex.pml"
 #include "futex.pml"
 #include "atomics.pml"
 
