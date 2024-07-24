@@ -11,8 +11,11 @@ mutexes = [
 
 MAX_NUM_THREADS=6
 
-for m in mutexes:
-    for t in range(2, MAX_NUM_THREADS+1):
+# Produce Latex table lines
+max_coeff_variation = 0.0
+for t in range(2, MAX_NUM_THREADS+1):
+    latexline = f'{t}'
+    for m in mutexes:
         durations = []
         num_states = 0
         for r in range(0, 10):
@@ -30,11 +33,21 @@ for m in mutexes:
                         elif 'pan: elapsed time ' in l:
                             durations.append(float(l.strip().split(' ')[3]))
 
-        if len(durations) != 10: continue
+        if len(durations) != 10:
+            latexline += ' & n/a & n/a'
+            continue
 
         mean = statistics.mean(durations)
         stddev = statistics.stdev(durations, xbar=mean)
+        latexline  += f' & {int(num_states)} & {mean:.2f}'
+
         coeff_variation = 0.0
         if mean > 0.1:
             coeff_variation = 100 * stddev / mean
-        print(f'M:{m} T:{t} #S:{num_states} mean:{mean} coeff_variation:{coeff_variation}')
+        max_coeff_variation = max(max_coeff_variation, coeff_variation)
+
+    latexline += ' \\\\'
+    print(latexline)
+
+print()
+print(f'%% max_coeff_variation: {max_coeff_variation}')
