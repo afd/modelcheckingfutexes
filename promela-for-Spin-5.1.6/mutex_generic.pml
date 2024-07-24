@@ -48,7 +48,16 @@ init {
     run Thread();
 #endif
 #if NUM_THREADS > 6
-#error "NUM_THREADS > 6 - edit macros to support more threads"
+    run Thread();
+#endif
+#if NUM_THREADS > 7
+    run Thread();
+#endif
+#if NUM_THREADS > 8
+    run Thread();
+#endif
+#if NUM_THREADS > 9
+#error "NUM_THREADS > 9 - edit macros to support more threads"
 #endif
     run Monitor();
   }

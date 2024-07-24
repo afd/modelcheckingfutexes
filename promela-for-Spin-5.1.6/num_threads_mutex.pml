@@ -22,8 +22,14 @@
 #define WAIT_SIZE 7
 #elif NUM_THREADS == 6
 #define WAIT_SIZE 8
+#elif NUM_THREADS == 7
+#define WAIT_SIZE 9
+#elif NUM_THREADS == 8
+#define WAIT_SIZE 10
+#elif NUM_THREADS == 9
+#define WAIT_SIZE 11
 #else
-#error "NUM_THREADS > 6 - edit macros to support more threads"
+#error "NUM_THREADS > 9 - edit macros to support more threads"
 #error
 #endif
 
