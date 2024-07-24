@@ -27,7 +27,10 @@ proctype Thread() {
 active
 #endif
 proctype Monitor() {
-end:  num_threads_in_cs > 1 -> assert(false);
+end:
+  atomic {
+    num_threads_in_cs > 1 -> assert(false);
+  }
 }
 
 #ifdef __TOPSPIN__
@@ -57,7 +60,10 @@ init {
     run Thread();
 #endif
 #if NUM_THREADS > 9
-#error "NUM_THREADS > 9 - edit macros to support more threads"
+    run Thread();
+#endif
+#if NUM_THREADS > 10
+#error "NUM_THREADS > 10 - edit macros to support more threads"
 #endif
     run Monitor();
   }

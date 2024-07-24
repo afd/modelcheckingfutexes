@@ -47,6 +47,7 @@ inline futex_wait(futex, val) {
 #define TID6 7
 #define TID7 8
 #define TID8 9
+#define TID9 10
 #else
 #define TID0 0
 #define TID1 1
@@ -57,6 +58,7 @@ inline futex_wait(futex, val) {
 #define TID6 6
 #define TID7 7
 #define TID8 8
+#define TID8 9
 #endif
 
 // futex_wake implements the FUTEX_WAKE operation: it
@@ -106,7 +108,11 @@ inline futex_wake(futex, num_to_wake) {
           //printf("T%d wakes T8\n", _pid)
 #endif
 #if NUM_THREADS > 9
-#error "NUM_THREADS > 9, add more if branches in futex_wake"
+       :: futex.wait[TID9] -> futex.wait[TID9] = false;
+          //printf("T%d wakes T9\n", _pid)
+#endif
+#if NUM_THREADS > 10
+#error "NUM_THREADS > 10, add more if branches in futex_wake"
 #endif
        fi;
        futex.num_waiting--;

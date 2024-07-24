@@ -20,6 +20,9 @@ active [NUM_THREADS] proctype Thread() {
 }
 
 // Never more than one thread in CS
-ltl safe_cs {
-  [](num_threads_in_cs <= 1)
+active proctype Monitor() {
+end:
+  atomic {
+    num_threads_in_cs > 1 -> assert(false);
+  }
 }

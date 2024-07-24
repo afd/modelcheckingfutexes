@@ -11,8 +11,8 @@ PROMELA_SOURCES = [
     "../promela/gustedt_mutex2.pml",
 ]
 
-MAX_NUM_THREADS=6
-NUM_ITERATIONS=10
+MAX_NUM_THREADS=10
+NUM_ITERATIONS=1
 DEPTH_LIMIT = 500000000
 
 CC = "gcc"
@@ -40,10 +40,14 @@ def generate_pan(promela_source, num_threads):
             f.close()
 
 
-def compile_pan(no_claim):
+def compile_pan(collapse=False, bitstate=False, dma=False):
     cmd = [CC, "-DSAFETY"]
-    if no_claim:
-        cmd += ["-DNOCLAIM"]
+    if collapse:
+        cmd += ["-DCOLLAPSE"]
+    if bitstate:
+        cmd += ["-DBITSTATE"]
+    if dma:
+        cmd += ["-DMA=50"]
     cmd += COPT
     cmd += ["-o", "pan", "pan.c"]
     run_cmd(cmd)
@@ -58,28 +62,31 @@ def run_pan(logfile):
     run_cmd(["./pan", f"-m{DEPTH_LIMIT}", "-b", "-x"], logfile)
 
 
-def logfilename(promela_source, num_threads, claim, iteration):
+def logfilename(promela_source, num_threads, iteration, collapse=False, bitstate=False, dma=False):
     basename = os.path.basename(promela_source)
-    return f'{LOG_DIR}/{basename}_{num_threads}_{claim}_{iteration}.txt'
+    result = f'{LOG_DIR}/{basename}_{num_threads}'
+    if collapse:
+        result += '_COLLAPSE'
+    if dma:
+        result += '_DMA'
+    if bitstate:
+        result += '_BITSTATE'
+    result += f'_{iteration}.txt'
+    return result
 
 def check_depth_limit_error(logfile):
     with open(logfile, 'r', encoding="utf-8") as f:
         s = f.read()
         return 'error: max search depth too small' not in s
 
-def run_noclaim(promela_source, num_threads, num_iterations):
-    compile_pan(no_claim=True)
+def compile_and_run_pan(promela_source, num_threads, num_iterations, collapse=False, bitstate=False, dma=False):
+    compile_pan(collapse=collapse, bitstate=bitstate, dma=dma)
     for i in range(num_iterations):
-        logfile = logfilename(promela_source, num_threads, 'noclaim', i)
-        run_pan(logfile)
-        if not check_depth_limit_error(logfile):
-            print('Depth limit too low, skipping other runs')
-            break
-
-def run_safe_cs(promela_source, num_threads, num_iterations):
-    compile_pan(no_claim=False)
-    for i in range(num_iterations):
-        logfile = logfilename(promela_source, num_threads, 'safe_cs', i)
+        logfile = logfilename(promela_source, num_threads,
+                              collapse=collapse,
+                              bitstate=bitstate,
+                              dma=dma,
+                              iteration=i)
         run_pan(logfile)
         if not check_depth_limit_error(logfile):
             print('Depth limit too low, skipping other runs')
@@ -92,5 +99,7 @@ if not os.path.isdir(LOG_DIR):
 for num_threads in range(2, MAX_NUM_THREADS+1):
     for promela_source in PROMELA_SOURCES:
         generate_pan(promela_source, num_threads)
-        run_noclaim(promela_source, num_threads, NUM_ITERATIONS)
-        run_safe_cs(promela_source, num_threads, NUM_ITERATIONS)
+        compile_and_run_pan(promela_source, num_threads, num_iterations=NUM_ITERATIONS)
+        compile_and_run_pan(promela_source, num_threads, collapse=True, num_iterations=NUM_ITERATIONS)
+        compile_and_run_pan(promela_source, num_threads, bitstate=True, num_iterations=NUM_ITERATIONS)
+        compile_and_run_pan(promela_source, num_threads, dma=True, num_iterations=NUM_ITERATIONS)
