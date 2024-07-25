@@ -14,9 +14,11 @@ PROMELA_SOURCES = [
 MAX_NUM_THREADS=10
 NUM_ITERATIONS=1
 DEPTH_LIMIT = 500000000
+MEMORY_LIMIT_MEGABYTES = 30 * 1024
+TIME_LIMIT_MINUTES = 6 * 60
 
 CC = "gcc"
-COPT = ["-O3"]
+COPT = ["-O3", f"-DMEMLIM={MEMORY_LIMIT_MEGABYTES}"]
 LOG_DIR="logs"
 
 def run_cmd(cmd, logfile=None):
@@ -59,7 +61,7 @@ def run_pan(logfile):
     # -b: error if depth-limit is exceeded
     # -x: do not overwrite an existing trail file, we use this to prevent pan
     #     from creating huge trail files.
-    run_cmd(["./pan", f"-m{DEPTH_LIMIT}", "-b", "-x"], logfile)
+    run_cmd(["./pan", f"-m{DEPTH_LIMIT}", f"-Q{TIME_LIMIT_MINUTES}", "-b", "-x"], logfile)
 
 
 def logfilename(promela_source, num_threads, iteration, collapse=False, bitstate=False, dma=False):
