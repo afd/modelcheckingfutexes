@@ -1,0 +1,5 @@
+gap=/home/afd/dev/gap/gap-4.13.1/gap
+saucy=/home/afd/dev/symmetrytools/saucy/saucy
+common=/home/afd/dev/symmetrytools/Common/
+explain=1
+preprocessor_directives=-D__TOPSPIN__ -DNUM_THREADS=4 -DNUM_WAITERS=3
