@@ -58,7 +58,7 @@ inline futex_wait(futex, val) {
 #define TID6 6
 #define TID7 7
 #define TID8 8
-#define TID8 9
+#define TID9 9
 #endif
 
 // futex_wake implements the FUTEX_WAKE operation: it
