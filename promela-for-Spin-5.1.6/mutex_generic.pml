@@ -13,6 +13,13 @@ byte num_threads_in_cs;
 active [NUM_THREADS]
 #endif
 proctype Thread() {
+  byte old_value; // Used by Drepper mutexes
+
+  // Used by Gustedt mutexes
+  byte prev = 0;
+  byte tmp = 0;
+  byte cur = 0;
+
   byte num_woken = 0; // Used by "futex_wake"
   do
   :: lock();

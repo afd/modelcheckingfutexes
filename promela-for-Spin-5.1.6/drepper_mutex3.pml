@@ -16,15 +16,14 @@ Futex futex;
 #include "drepper_mutex3x_lock.pml"
 
 inline unlock() {
-  byte old_value_unlock;
   d_step {
-    fetch_dec(futex.word, old_value_unlock);
-    printf("T%d decrements futex word from %d to %d\n", _pid, old_value_unlock, futex.word);
+    fetch_dec(futex.word, old_value);
+    printf("T%d decrements futex word from %d to %d\n", _pid, old_value, futex.word);
   }
   if
-  :: d_step { old_value_unlock == 2 -> futex.word = 0; old_value_unlock = 0 }
+  :: d_step { old_value == 2 -> futex.word = 0; old_value = 0 }
      futex_wake(futex, 1)
-  :: d_step { old_value_unlock == 1 -> old_value_unlock = 0 }
+  :: d_step { old_value == 1 -> old_value = 0 }
   fi
 }
 

@@ -18,10 +18,11 @@ byte cv_previous; // Additional state
 
 inline cv_wait() {
   cv_previous = futex.word;
-  byte val = cv_previous;
+  val = cv_previous;
   mutex_unlock(); /*@\label{line:condvar3:mutexunlock}@*/
   futex_wait(futex, val); /*@\label{line:condvar3:futexwait}@*/
   mutex_lock();
+  val = 0;
 }
 
 inline cv_signal() {

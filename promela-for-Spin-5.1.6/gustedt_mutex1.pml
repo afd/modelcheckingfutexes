@@ -18,8 +18,6 @@
 Futex futex;
 
 inline lock() {
-  byte tmp = 0;
-  byte cur = 0;
   atomic {
     cmpxchg(futex.word, 0, set_locked(1), cur);
     if
@@ -62,7 +60,6 @@ inline lock() {
 }
 
 inline unlock() {
-  byte prev = 0;
   d_step {
     lockbit_fetch_unlock_and_dec(futex.word, prev);
     printf(

@@ -18,6 +18,7 @@ byte num_done; // Number of terminated waiter threads
 active [NUM_WAITERS]
 #endif
 proctype Waiter() {
+  byte val = 0;
   do
   :: mutex_lock() ->
      num_signals_req++;

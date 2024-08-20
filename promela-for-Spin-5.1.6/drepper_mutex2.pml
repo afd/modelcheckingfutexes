@@ -14,11 +14,10 @@
 Futex futex;
 
 inline lock() {
-  byte old_value_lock;
   atomic {
-    cmpxchg(futex.word, 0, 1, old_value_lock);
+    cmpxchg(futex.word, 0, 1, old_value);
     if
-    :: old_value_lock == 0 ->
+    :: old_value == 0 ->
        printf("T%d locks mutex on fast path\n", _pid);
        goto acquired_mutex
     :: else ->
@@ -29,12 +28,12 @@ inline lock() {
   do
   :: atomic {
        if
-       :: old_value_lock == 2
+       :: old_value == 2
        :: else ->
-          assert(old_value_lock == 1);
-          cmpxchg(futex.word, 1, 2, old_value_lock);
+          assert(old_value == 1);
+          cmpxchg(futex.word, 1, 2, old_value);
           if
-          :: old_value_lock == 0 -> goto retry
+          :: old_value == 0 -> goto retry
           :: else
           fi
        fi
@@ -42,9 +41,9 @@ inline lock() {
      futex_wait(futex, 2);
 retry:
      atomic {
-       cmpxchg(futex.word, 0, 2, old_value_lock);
+       cmpxchg(futex.word, 0, 2, old_value);
        if
-       :: old_value_lock == 0 ->
+       :: old_value == 0 ->
           printf("T%d locks mutex on slow path\n",
                  _pid);
           goto acquired_mutex
@@ -60,22 +59,21 @@ acquired_mutex:
 }
 
 inline unlock() {
-  byte old_value_unlock;
   d_step {
-    fetch_dec(futex.word, old_value_unlock);
+    fetch_dec(futex.word, old_value);
     printf("T%d decrements futex word from %d to %d\n",
-           _pid, old_value_unlock, futex.word)
+           _pid, old_value, futex.word)
   }
   if
   :: d_step {
-       old_value_unlock == 2 ->
+       old_value == 2 ->
        futex.word = 0;
-       old_value_unlock = 0
+       old_value = 0
      }
      futex_wake(futex, 1)
   :: d_step {
-       old_value_unlock == 1 ->
-       old_value_unlock = 0
+       old_value == 1 ->
+       old_value = 0
      }
   fi
 }
