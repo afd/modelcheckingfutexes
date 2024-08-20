@@ -68,7 +68,7 @@ inline futex_wake(futex, num_to_wake) {
   atomic {
     // The waker must not be asleep
     assert(!futex.wait[_pid]);
-    num_woken = 0; // "byte num_woken" needs to be in scope
+    num_woken = 0;
     do
     :: num_woken == num_to_wake ||
          futex.num_waiting == 0 ->

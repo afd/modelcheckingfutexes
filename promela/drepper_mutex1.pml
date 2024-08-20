@@ -18,7 +18,6 @@
 Futex futex;
 
 inline lock() {
-  byte old_value;
   do
   :: atomic {
        fetch_inc(futex.word, old_value); /*@\label{line:drepper1:fetchinc}@*/

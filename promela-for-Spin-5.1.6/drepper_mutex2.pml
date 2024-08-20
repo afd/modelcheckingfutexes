@@ -39,7 +39,7 @@ inline lock() {
        fi
      }
      futex_wait(futex, 2);
-retry:
+     retry:
      atomic {
        cmpxchg(futex.word, 0, 2, old_value);
        if
@@ -54,8 +54,7 @@ retry:
        fi
      }
   od;
-acquired_mutex:
-  skip;  
+  acquired_mutex: skip;
 }
 
 inline unlock() {

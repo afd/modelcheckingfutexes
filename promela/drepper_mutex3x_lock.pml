@@ -1,7 +1,6 @@
 /* The lock() function for drepper_mutex3 and drepper_mutex3b */
 
 inline lock() {
-  byte old_value;
   cmpxchg(futex.word, 0, 1, old_value);
   if
   :: atomic {

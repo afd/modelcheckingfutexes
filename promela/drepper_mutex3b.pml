@@ -15,7 +15,6 @@ Futex futex;
 #include "drepper_mutex3x_lock.pml"
 
 inline unlock() {
-  byte old_value;
   d_step {
     xchg(futex.word, 0, old_value);
     printf("T%d exchanges futex word with 0; old value was %d\n", _pid, old_value);

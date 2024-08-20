@@ -11,10 +11,11 @@
 Futex futex;
 
 inline cv_wait() {
-  byte val = futex.word; /*@\label{line:condvar2:savefutexword}@*/
+  val = futex.word; /*@\label{line:condvar2:savefutexword}@*/
   mutex_unlock(); /*@\label{line:condvar2:mutexunlock}@*/
   futex_wait(futex, val); /*@\label{line:condvar2:futexwait}@*/
   mutex_lock();
+  val = 0;
 }
 
 inline cv_signal() {

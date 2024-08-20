@@ -17,8 +17,6 @@
 Futex futex;
 
 inline lock() {
-  byte prev = 0;
-  byte cur = 0;
   atomic {
     cmpxchg(futex.word, 0, set_locked(1), cur);
     if
@@ -34,13 +32,13 @@ inline lock() {
      if
      :: is_locked(cur) -> cur = dec(unset_locked(cur));
      :: else
-     fi
+     fi;
      cmpxchg(futex.word, cur, set_locked(cur + 1), prev);
      if
      :: cur == prev -> goto acquired_mutex
      :: else -> cur = prev
      fi
-  od
+  od;
 
   lockbit_fetch_inc(futex.word, cur);
   cur = cur + 1;
@@ -51,19 +49,18 @@ inline lock() {
         futex_wait(futex, cur);
         cur = dec(unset_locked(cur))
      :: else
-     fi
+     fi;
      cmpxchg(futex.word, cur, set_locked(cur), prev);
      if
      :: cur == prev -> goto acquired_mutex
      :: else -> cur = prev
      fi
-  od
+  od;
 
   acquired_mutex: prev = 0; cur = 0;
 }
 
 inline unlock() {
-  byte prev = 0;
   d_step {
     lockbit_fetch_unlock_and_dec(futex.word, prev);
     printf("T%d unlocks: set futex word from %d to %d\n", _pid, prev, futex.word);
@@ -71,7 +68,7 @@ inline unlock() {
   if
   :: prev != set_locked(1) -> futex_wake(futex, 1)
   :: else
-  fi
+  fi;
   prev = 0;
 }
 

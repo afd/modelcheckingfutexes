@@ -13,7 +13,6 @@
 Futex futex;
 
 inline lock() {
-  byte old_value;
   atomic {
     cmpxchg(futex.word, 0, 1, old_value);
     if
@@ -31,17 +30,17 @@ inline lock() {
        :: old_value == 2
        :: else ->
           assert(old_value == 1);
-          cmpxchg(futex.word, 1, 2, old_value)
+          cmpxchg(futex.word, 1, 2, old_value);
           if
           :: old_value == 0 -> goto retry
           :: else
           fi
        fi
      }
-     futex_wait(futex, 2)        
-retry:
+     futex_wait(futex, 2);
+     retry:
      atomic {
-       cmpxchg(futex.word, 0, 2, old_value)
+       cmpxchg(futex.word, 0, 2, old_value);
        if
        :: old_value == 0 ->
           printf("T%d locks mutex on slow path\n",
@@ -53,12 +52,11 @@ retry:
             	 _pid)
        fi
      }
-  od
-  acquired_mutex:
+  od;
+  acquired_mutex: skip;
 }
 
 inline unlock() {
-  byte old_value;
   d_step {
     fetch_dec(futex.word, old_value);
     printf("T%d decrements futex word from %d to %d\n",

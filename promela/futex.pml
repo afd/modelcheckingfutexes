@@ -66,7 +66,7 @@ inline futex_wake(futex, num_to_wake) {
   atomic {
     // The waker must not be asleep
     assert(!futex.wait[_pid]);
-    byte num_woken = 0;
+    num_woken = 0;
     do
     :: num_woken == num_to_wake ||
          futex.num_waiting == 0 ->
@@ -112,10 +112,10 @@ inline futex_wake(futex, num_to_wake) {
 #if NUM_THREADS > 10
 #error "NUM_THREADS > 10, add more if branches in futex_wake"
 #endif
-       fi
+       fi;
        futex.num_waiting--;
        num_woken++;
-    od
+    od;
     printf("T%d woke up %d thread(s)\n",
            _pid, num_woken);
     // Reset to avoid state space explosion

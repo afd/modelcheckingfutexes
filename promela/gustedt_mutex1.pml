@@ -17,8 +17,6 @@
 Futex futex;
 
 inline lock() {
-  byte tmp = 0;
-  byte cur = 0;
   atomic {
     cmpxchg(futex.word, 0, set_locked(1), cur);
     if
@@ -49,19 +47,18 @@ inline lock() {
      do // Busy wait loop /*@\label{line:gustedt1pml:busywaitloop}@*/
      :: is_locked(cur) -> cur = futex.word  /*@\label{line:gustedt1pml:busywaitloopread}@*/
      :: true -> goto retry  /*@\label{line:gustedt1pml:busywaitloopbreak}@*/
-     od
+     od;
      goto retry
   :: else ->
      futex_wait(futex, cur);
      cur = futex.word;
      goto retry
-  fi
+  fi;
 
   acquired_mutex: tmp = 0; cur = 0;
 }
 
 inline unlock() {
-  byte prev = 0;
   d_step {
     lockbit_fetch_unlock_and_dec(futex.word, prev);
     printf(
@@ -71,7 +68,7 @@ inline unlock() {
   if
   :: prev != set_locked(1) -> futex_wake(futex, 1)
   :: else
-  fi
+  fi;
   prev = 0;
 }
 

@@ -17,6 +17,7 @@ byte num_signals_req; // Number of signals required
 byte num_done; // Number of terminated waiter threads
 
 active[NUM_WAITERS] proctype Waiter() {
+  byte val = 0;
   do
   :: mutex_lock() ->
      num_signals_req++;
@@ -25,11 +26,12 @@ active[NUM_WAITERS] proctype Waiter() {
      printf("T%d returns from cv_wait()\n", _pid);
      mutex_unlock()
   :: break
-  od
+  od;
   num_done++;
 }
 
 active proctype Signaller() {
+  byte num_woken = 0; // Used by "futex_wake"
   do
   :: num_signals_req > 0 -> /*@\label{line:condvar:signalrequired}@*/
      mutex_lock(); /*@\label{line:condvar:mustsignalstart}@*/
