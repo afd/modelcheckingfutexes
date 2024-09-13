@@ -21,6 +21,7 @@ inline cv_wait() {
   mutex_unlock(); /*@\label{line:condvar3:mutexunlock}@*/
   futex_wait(futex, val); /*@\label{line:condvar3:futexwait}@*/
   mutex_lock();
+  // Reset to avoid state space explosion
   val = 0;
 }
 
