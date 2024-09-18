@@ -15,54 +15,69 @@
 		_m = 3; goto P999;
 
 		 /* PROC :init: */
-	case 3: /* STATE 1 - line 39 "../../../mutex_generic.pml" - [(run Thread())] (0:0:0 - 1) */
+	case 3: /* STATE 1 - ../../../mutex_generic.pml:46 - [(run Thread())] (0:0:0 - 1) */
 		IfNotBlocked
 		reached[2][1] = 1;
-		if (!(addproc(0)))
+		if (!(addproc(II, 0)))
 			continue;
 		_m = 3; goto P999; /* 0 */
-/* STATE 2 - line 40 "../../../mutex_generic.pml" - [(run Thread())] (0:0 - 1) same as 3 (0:0 - 1) */
-/* STATE 3 - line 42 "../../../mutex_generic.pml" - [(run Thread())] (0:0 - 1) same as 3 (0:0 - 1) */
-/* STATE 4 - line 45 "../../../mutex_generic.pml" - [(run Thread())] (0:0 - 1) same as 3 (0:0 - 1) */
-	case 4: /* STATE 5 - line 68 "../../../mutex_generic.pml" - [(run Monitor())] (0:0:0 - 1) */
+	case 4: /* STATE 2 - ../../../mutex_generic.pml:47 - [(run Thread())] (0:0:0 - 1) */
+		IfNotBlocked
+		reached[2][2] = 1;
+		if (!(addproc(II, 0)))
+			continue;
+		_m = 3; goto P999; /* 0 */
+	case 5: /* STATE 3 - ../../../mutex_generic.pml:49 - [(run Thread())] (0:0:0 - 1) */
+		IfNotBlocked
+		reached[2][3] = 1;
+		if (!(addproc(II, 0)))
+			continue;
+		_m = 3; goto P999; /* 0 */
+	case 6: /* STATE 4 - ../../../mutex_generic.pml:52 - [(run Thread())] (0:0:0 - 1) */
+		IfNotBlocked
+		reached[2][4] = 1;
+		if (!(addproc(II, 0)))
+			continue;
+		_m = 3; goto P999; /* 0 */
+	case 7: /* STATE 5 - ../../../mutex_generic.pml:75 - [(run Monitor())] (0:0:0 - 1) */
 		IfNotBlocked
 		reached[2][5] = 1;
-		if (!(addproc(1)))
+		if (!(addproc(II, 1)))
 			continue;
 		_m = 3; goto P999; /* 0 */
-	case 5: /* STATE 7 - line 70 "../../../mutex_generic.pml" - [-end-] (0:0:0 - 1) */
+	case 8: /* STATE 7 - ../../../mutex_generic.pml:77 - [-end-] (0:0:0 - 1) */
 		IfNotBlocked
 		reached[2][7] = 1;
 		if (!delproc(1, II)) continue;
 		_m = 3; goto P999; /* 0 */
 
 		 /* PROC Monitor */
-	case 6: /* STATE 1 - line 32 "../../../mutex_generic.pml" - [((num_threads_in_cs>1))] (4:0:0 - 1) */
+	case 9: /* STATE 1 - ../../../mutex_generic.pml:39 - [((num_threads_in_cs>1))] (4:0:0 - 1) */
 		IfNotBlocked
 		reached[1][1] = 1;
 		if (!((((int)now.num_threads_in_cs)>1)))
 			continue;
 		/* merge: assert(0)(0, 2, 4) */
 		reached[1][2] = 1;
-		assert(0, "0", II, tt, t);
+		spin_assert(0, "0", II, tt, t);
 		_m = 3; goto P999; /* 1 */
-	case 7: /* STATE 4 - line 34 "../../../mutex_generic.pml" - [-end-] (0:0:0 - 1) */
+	case 10: /* STATE 4 - ../../../mutex_generic.pml:41 - [-end-] (0:0:0 - 1) */
 		IfNotBlocked
 		reached[1][4] = 1;
 		if (!delproc(1, II)) continue;
 		_m = 3; goto P999; /* 0 */
 
 		 /* PROC Thread */
-	case 8: /* STATE 3 - line 3 "../../../atomics.pml" - [D_STEP] */
+	case 11: /* STATE 3 - ../../../atomics.pml:3 - [D_STEP] */
 		IfNotBlocked
 		sv_save();
 		reached[0][3] = 1;
 		reached[0][t->st] = 1;
 		reached[0][tt] = 1;
 S_000_0: /* 2 */
-		((P0 *)this)->cur = ((int)now.futex.word);
+		((P0 *)this)->_2_cur = ((int)now.futex.word);
 #ifdef VAR_RANGES
-		logval("Thread:cur", ((int)((P0 *)this)->cur));
+		logval("Thread:cur", ((int)((P0 *)this)->_2_cur));
 #endif
 		;
 S_001_0: /* 2 */
@@ -79,16 +94,16 @@ S_009_0: /* 1 */
 #endif
 		_m = 3; goto P999;
 
-	case 9: /* STATE 5 - line 26 "../../../gustedt_mutex2.pml" - [((cur==0))] (77:0:1 - 1) */
+	case 12: /* STATE 5 - ../../../gustedt_mutex2.pml:24 - [((cur==0))] (77:0:1 - 1) */
 		IfNotBlocked
 		reached[0][5] = 1;
-		if (!((((int)((P0 *)this)->cur)==0)))
+		if (!((((int)((P0 *)this)->_2_cur)==0)))
 			continue;
-		/* dead 1: cur */  (trpt+1)->bup.oval = ((P0 *)this)->cur;
+		/* dead 1: _2_cur */  (trpt+1)->bup.oval = ((P0 *)this)->_2_cur;
 #ifdef HAS_CODE
 		if (!readtrail)
 #endif
-			((P0 *)this)->cur = 0;
+			((P0 *)this)->_2_cur = 0;
 		/* merge: printf('T%d locks mutex on fast path\\n',_pid)(77, 6, 77) */
 		reached[0][6] = 1;
 		Printf("T%d locks mutex on fast path\n", ((int)((P0 *)this)->_pid));
@@ -96,7 +111,7 @@ S_009_0: /* 1 */
 		reached[0][7] = 1;
 		;
 		_m = 3; goto P999; /* 2 */
-	case 10: /* STATE 11 - line 30 "../../../gustedt_mutex2.pml" - [.(goto)] (0:31:0 - 1) */
+	case 13: /* STATE 11 - ../../../gustedt_mutex2.pml:28 - [.(goto)] (0:31:0 - 1) */
 		IfNotBlocked
 		reached[0][11] = 1;
 		;
@@ -104,7 +119,7 @@ S_009_0: /* 1 */
 		reached[0][32] = 1;
 		;
 		_m = 3; goto P999; /* 1 */
-	case 11: /* STATE 9 - line 28 "../../../gustedt_mutex2.pml" - [printf('T%d fails to lock mutex on fast path\\n',_pid)] (0:31:0 - 1) */
+	case 14: /* STATE 9 - ../../../gustedt_mutex2.pml:26 - [printf('T%d fails to lock mutex on fast path\\n',_pid)] (0:31:0 - 1) */
 		IfNotBlocked
 		reached[0][9] = 1;
 		Printf("T%d fails to lock mutex on fast path\n", ((int)((P0 *)this)->_pid));
@@ -115,37 +130,37 @@ S_009_0: /* 1 */
 		reached[0][32] = 1;
 		;
 		_m = 3; goto P999; /* 2 */
-	case 12: /* STATE 16 - line 36 "../../../gustedt_mutex2.pml" - [(((1<<7)&cur))] (24:0:1 - 1) */
+	case 15: /* STATE 16 - ../../../gustedt_mutex2.pml:34 - [(((1<<7)&cur))] (24:0:1 - 1) */
 		IfNotBlocked
 		reached[0][16] = 1;
-		if (!(((1<<7)&((int)((P0 *)this)->cur))))
+		if (!(((1<<7)&((int)((P0 *)this)->_2_cur))))
 			continue;
 		/* merge: cur = ( (((((1<<7)-1)&cur)==0)) -> ((4+1)) : (((((1<<7)-1)&cur)-1)) )(0, 17, 24) */
 		reached[0][17] = 1;
-		(trpt+1)->bup.oval = ((int)((P0 *)this)->cur);
-		((P0 *)this)->cur = ( (((((1<<7)-1)&((int)((P0 *)this)->cur))==0)) ? ((4+1)) : (((((1<<7)-1)&((int)((P0 *)this)->cur))-1)) );
+		(trpt+1)->bup.oval = ((int)((P0 *)this)->_2_cur);
+		((P0 *)this)->_2_cur = ( (((((1<<7)-1)&((int)((P0 *)this)->_2_cur))==0)) ? ((4+1)) : (((((1<<7)-1)&((int)((P0 *)this)->_2_cur))-1)) );
 #ifdef VAR_RANGES
-		logval("Thread:cur", ((int)((P0 *)this)->cur));
+		logval("Thread:cur", ((int)((P0 *)this)->_2_cur));
 #endif
 		;
 		/* merge: .(goto)(0, 20, 24) */
 		reached[0][20] = 1;
 		;
 		_m = 3; goto P999; /* 2 */
-	case 13: /* STATE 23 - line 3 "../../../atomics.pml" - [D_STEP] */
+	case 16: /* STATE 23 - ../../../atomics.pml:3 - [D_STEP] */
 		IfNotBlocked
 		sv_save();
 		reached[0][23] = 1;
 		reached[0][t->st] = 1;
 		reached[0][tt] = 1;
 S_020_0: /* 2 */
-		((P0 *)this)->prev_lock = ((int)now.futex.word);
+		((P0 *)this)->_2_prev = ((int)now.futex.word);
 #ifdef VAR_RANGES
-		logval("Thread:prev_lock", ((int)((P0 *)this)->prev_lock));
+		logval("Thread:prev", ((int)((P0 *)this)->_2_prev));
 #endif
 		;
 S_021_0: /* 2 */
-		now.futex.word = ( ((((int)now.futex.word)==((int)((P0 *)this)->cur))) ? (((1<<7)|(((int)((P0 *)this)->cur)+1))) : (((int)now.futex.word)) );
+		now.futex.word = ( ((((int)now.futex.word)==((int)((P0 *)this)->_2_cur))) ? (((1<<7)|(((int)((P0 *)this)->_2_cur)+1))) : (((int)now.futex.word)) );
 #ifdef VAR_RANGES
 		logval("futex.word", ((int)now.futex.word));
 #endif
@@ -158,43 +173,43 @@ S_028_0: /* 1 */
 #endif
 		_m = 3; goto P999;
 
-	case 14: /* STATE 25 - line 41 "../../../gustedt_mutex2.pml" - [((cur==prev_lock))] (0:0:2 - 1) */
+	case 17: /* STATE 25 - ../../../gustedt_mutex2.pml:39 - [((cur==prev))] (0:0:2 - 1) */
 		IfNotBlocked
 		reached[0][25] = 1;
-		if (!((((int)((P0 *)this)->cur)==((int)((P0 *)this)->prev_lock))))
+		if (!((((int)((P0 *)this)->_2_cur)==((int)((P0 *)this)->_2_prev))))
 			continue;
-		/* dead 1: cur */  (trpt+1)->bup.ovals = grab_ints(2);
-		(trpt+1)->bup.ovals[0] = ((P0 *)this)->cur;
+		/* dead 1: _2_cur */  (trpt+1)->bup.ovals = grab_ints(2);
+		(trpt+1)->bup.ovals[0] = ((P0 *)this)->_2_cur;
 #ifdef HAS_CODE
 		if (!readtrail)
 #endif
-			((P0 *)this)->cur = 0;
-		/* dead 1: prev_lock */  (trpt+1)->bup.ovals[1] = ((P0 *)this)->prev_lock;
+			((P0 *)this)->_2_cur = 0;
+		/* dead 1: _2_prev */  (trpt+1)->bup.ovals[1] = ((P0 *)this)->_2_prev;
 #ifdef HAS_CODE
 		if (!readtrail)
 #endif
-			((P0 *)this)->prev_lock = 0;
+			((P0 *)this)->_2_prev = 0;
 		_m = 3; goto P999; /* 0 */
-	case 15: /* STATE 28 - line 42 "../../../gustedt_mutex2.pml" - [cur = prev_lock] (0:0:1 - 1) */
+	case 18: /* STATE 28 - ../../../gustedt_mutex2.pml:40 - [cur = prev] (0:0:1 - 1) */
 		IfNotBlocked
 		reached[0][28] = 1;
-		(trpt+1)->bup.oval = ((int)((P0 *)this)->cur);
-		((P0 *)this)->cur = ((int)((P0 *)this)->prev_lock);
+		(trpt+1)->bup.oval = ((int)((P0 *)this)->_2_cur);
+		((P0 *)this)->_2_cur = ((int)((P0 *)this)->_2_prev);
 #ifdef VAR_RANGES
-		logval("Thread:cur", ((int)((P0 *)this)->cur));
+		logval("Thread:cur", ((int)((P0 *)this)->_2_cur));
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 16: /* STATE 41 - line 8 "../../../lockbit.pml" - [D_STEP] */
+	case 19: /* STATE 41 - ../../../lockbit.pml:8 - [D_STEP] */
 		IfNotBlocked
 		sv_save();
 		reached[0][41] = 1;
 		reached[0][t->st] = 1;
 		reached[0][tt] = 1;
 S_033_0: /* 2 */
-		((P0 *)this)->cur = ((int)now.futex.word);
+		((P0 *)this)->_2_cur = ((int)now.futex.word);
 #ifdef VAR_RANGES
-		logval("Thread:cur", ((int)((P0 *)this)->cur));
+		logval("Thread:cur", ((int)((P0 *)this)->_2_cur));
 #endif
 		;
 S_038_0: /* 2 */
@@ -229,39 +244,39 @@ S_042_0: /* 1 */
 #endif
 		_m = 3; goto P999;
 
-	case 17: /* STATE 43 - line 47 "../../../gustedt_mutex2.pml" - [cur = (cur+1)] (0:74:1 - 1) */
+	case 20: /* STATE 43 - ../../../gustedt_mutex2.pml:45 - [cur = (cur+1)] (0:74:1 - 1) */
 		IfNotBlocked
 		reached[0][43] = 1;
-		(trpt+1)->bup.oval = ((int)((P0 *)this)->cur);
-		((P0 *)this)->cur = (((int)((P0 *)this)->cur)+1);
+		(trpt+1)->bup.oval = ((int)((P0 *)this)->_2_cur);
+		((P0 *)this)->_2_cur = (((int)((P0 *)this)->_2_cur)+1);
 #ifdef VAR_RANGES
-		logval("Thread:cur", ((int)((P0 *)this)->cur));
+		logval("Thread:cur", ((int)((P0 *)this)->_2_cur));
 #endif
 		;
 		/* merge: .(goto)(0, 75, 74) */
 		reached[0][75] = 1;
 		;
 		_m = 3; goto P999; /* 1 */
-	case 18: /* STATE 44 - line 51 "../../../gustedt_mutex2.pml" - [(((1<<7)&cur))] (0:0:0 - 1) */
+	case 21: /* STATE 44 - ../../../gustedt_mutex2.pml:49 - [(((1<<7)&cur))] (0:0:0 - 1) */
 		IfNotBlocked
 		reached[0][44] = 1;
-		if (!(((1<<7)&((int)((P0 *)this)->cur))))
+		if (!(((1<<7)&((int)((P0 *)this)->_2_cur))))
 			continue;
 		_m = 3; goto P999; /* 0 */
-	case 19: /* STATE 50 - line 17 "../../../futex.pml" - [D_STEP] */
-		if (!(boq == -1 && (((int)now.futex.word)==((int)((P0 *)this)->cur))))
+	case 22: /* STATE 50 - ../../../futex.pml:17 - [D_STEP] */
+		if (!(boq == -1 && (((int)now.futex.word)==((int)((P0 *)this)->_2_cur))))
 			continue;
 		sv_save();
 		reached[0][50] = 1;
 		reached[0][t->st] = 1;
 		reached[0][tt] = 1;
 S_044_0: /* 2 */
-		if (!((((int)now.futex.word)==((int)((P0 *)this)->cur))))
-			Uerror("block in step seq");
+		if (!((((int)now.futex.word)==((int)((P0 *)this)->_2_cur))))
+			Uerror("block in d_step seq");
 S_045_0: /* 2 */
 		Printf("T%d futex_wait, value match: %d; sleep\n", ((int)((P0 *)this)->_pid), ((int)now.futex.word));
 S_046_0: /* 2 */
-		assert( !(((int)now.futex.wait[ Index(((int)((P0 *)this)->_pid), 6) ])), " !(futex.wait[_pid])", II, tt, t);
+		spin_assert( !(((int)now.futex.wait[ Index(((int)((P0 *)this)->_pid), 6) ])), " !(futex.wait[_pid])", II, tt, t);
 S_047_0: /* 2 */
 		now.futex.wait[ Index(((P0 *)this)->_pid, 6) ] = 1;
 #ifdef VAR_RANGES
@@ -282,7 +297,7 @@ S_052_0: /* 1 */
 #endif
 		_m = 3; goto P999;
 
-	case 20: /* STATE 53 - line 27 "../../../futex.pml" - [D_STEP] */
+	case 23: /* STATE 53 - ../../../futex.pml:27 - [D_STEP] */
 		if (!(boq == -1 &&  !(((int)now.futex.wait[ Index(((int)((P0 *)this)->_pid), 6) ]))))
 			continue;
 		sv_save();
@@ -291,7 +306,7 @@ S_052_0: /* 1 */
 		reached[0][tt] = 1;
 S_050_0: /* 2 */
 		if (!( !(((int)now.futex.wait[ Index(((int)((P0 *)this)->_pid), 6) ]))))
-			Uerror("block in step seq");
+			Uerror("block in d_step seq");
 S_051_0: /* 2 */
 		Printf("T%d has woken\n", ((int)((P0 *)this)->_pid));
 		goto S_057_0;
@@ -302,7 +317,7 @@ S_057_0: /* 1 */
 #endif
 		_m = 3; goto P999;
 
-	case 21: /* STATE 56 - line 31 "../../../futex.pml" - [D_STEP] */
+	case 24: /* STATE 56 - ../../../futex.pml:31 - [D_STEP] */
 		if (boq != -1 || (trpt->o_pm&1))
 			continue;
 		sv_save();
@@ -312,7 +327,7 @@ S_057_0: /* 1 */
 S_053_0: /* 2 */
 		/* else */;
 S_054_0: /* 2 */
-		Printf("T%d futex_wait, value mismatch: %d vs. %d; do not sleep\n", ((int)((P0 *)this)->_pid), ((int)now.futex.word), ((int)((P0 *)this)->cur));
+		Printf("T%d futex_wait, value mismatch: %d vs. %d; do not sleep\n", ((int)((P0 *)this)->_pid), ((int)now.futex.word), ((int)((P0 *)this)->_2_cur));
 		goto S_057_0; /* ';' */
 
 #if defined(C_States) && (HAS_TRACK==1)
@@ -320,33 +335,33 @@ S_054_0: /* 2 */
 #endif
 		_m = 3; goto P999;
 
-	case 22: /* STATE 60 - line 53 "../../../gustedt_mutex2.pml" - [cur = ( (((((1<<7)-1)&cur)==0)) -> ((4+1)) : (((((1<<7)-1)&cur)-1)) )] (0:67:1 - 3) */
+	case 25: /* STATE 60 - ../../../gustedt_mutex2.pml:51 - [cur = ( (((((1<<7)-1)&cur)==0)) -> ((4+1)) : (((((1<<7)-1)&cur)-1)) )] (0:67:1 - 3) */
 		IfNotBlocked
 		reached[0][60] = 1;
-		(trpt+1)->bup.oval = ((int)((P0 *)this)->cur);
-		((P0 *)this)->cur = ( (((((1<<7)-1)&((int)((P0 *)this)->cur))==0)) ? ((4+1)) : (((((1<<7)-1)&((int)((P0 *)this)->cur))-1)) );
+		(trpt+1)->bup.oval = ((int)((P0 *)this)->_2_cur);
+		((P0 *)this)->_2_cur = ( (((((1<<7)-1)&((int)((P0 *)this)->_2_cur))==0)) ? ((4+1)) : (((((1<<7)-1)&((int)((P0 *)this)->_2_cur))-1)) );
 #ifdef VAR_RANGES
-		logval("Thread:cur", ((int)((P0 *)this)->cur));
+		logval("Thread:cur", ((int)((P0 *)this)->_2_cur));
 #endif
 		;
 		/* merge: .(goto)(0, 63, 67) */
 		reached[0][63] = 1;
 		;
 		_m = 3; goto P999; /* 1 */
-	case 23: /* STATE 66 - line 3 "../../../atomics.pml" - [D_STEP] */
+	case 26: /* STATE 66 - ../../../atomics.pml:3 - [D_STEP] */
 		IfNotBlocked
 		sv_save();
 		reached[0][66] = 1;
 		reached[0][t->st] = 1;
 		reached[0][tt] = 1;
 S_063_0: /* 2 */
-		((P0 *)this)->prev_lock = ((int)now.futex.word);
+		((P0 *)this)->_2_prev = ((int)now.futex.word);
 #ifdef VAR_RANGES
-		logval("Thread:prev_lock", ((int)((P0 *)this)->prev_lock));
+		logval("Thread:prev", ((int)((P0 *)this)->_2_prev));
 #endif
 		;
 S_064_0: /* 2 */
-		now.futex.word = ( ((((int)now.futex.word)==((int)((P0 *)this)->cur))) ? (((1<<7)|((int)((P0 *)this)->cur))) : (((int)now.futex.word)) );
+		now.futex.word = ( ((((int)now.futex.word)==((int)((P0 *)this)->_2_cur))) ? (((1<<7)|((int)((P0 *)this)->_2_cur))) : (((int)now.futex.word)) );
 #ifdef VAR_RANGES
 		logval("futex.word", ((int)now.futex.word));
 #endif
@@ -359,29 +374,54 @@ S_071_0: /* 1 */
 #endif
 		_m = 3; goto P999;
 
-/* STATE 68 - line 58 "../../../gustedt_mutex2.pml" - [((cur==prev_lock))] (0:0 - 1) same as 14 (0:0 - 1) */
-/* STATE 71 - line 59 "../../../gustedt_mutex2.pml" - [cur = prev_lock] (0:0 - 1) same as 15 (0:0 - 1) */
-	case 24: /* STATE 77 - line 63 "../../../gustedt_mutex2.pml" - [prev_lock = 0] (0:0:1 - 6) */
+	case 27: /* STATE 68 - ../../../gustedt_mutex2.pml:56 - [((cur==prev))] (0:0:2 - 1) */
+		IfNotBlocked
+		reached[0][68] = 1;
+		if (!((((int)((P0 *)this)->_2_cur)==((int)((P0 *)this)->_2_prev))))
+			continue;
+		/* dead 1: _2_cur */  (trpt+1)->bup.ovals = grab_ints(2);
+		(trpt+1)->bup.ovals[0] = ((P0 *)this)->_2_cur;
+#ifdef HAS_CODE
+		if (!readtrail)
+#endif
+			((P0 *)this)->_2_cur = 0;
+		/* dead 1: _2_prev */  (trpt+1)->bup.ovals[1] = ((P0 *)this)->_2_prev;
+#ifdef HAS_CODE
+		if (!readtrail)
+#endif
+			((P0 *)this)->_2_prev = 0;
+		_m = 3; goto P999; /* 0 */
+	case 28: /* STATE 71 - ../../../gustedt_mutex2.pml:57 - [cur = prev] (0:0:1 - 1) */
+		IfNotBlocked
+		reached[0][71] = 1;
+		(trpt+1)->bup.oval = ((int)((P0 *)this)->_2_cur);
+		((P0 *)this)->_2_cur = ((int)((P0 *)this)->_2_prev);
+#ifdef VAR_RANGES
+		logval("Thread:cur", ((int)((P0 *)this)->_2_cur));
+#endif
+		;
+		_m = 3; goto P999; /* 0 */
+	case 29: /* STATE 77 - ../../../gustedt_mutex2.pml:61 - [prev = 0] (0:0:1 - 6) */
 		IfNotBlocked
 		reached[0][77] = 1;
-		(trpt+1)->bup.oval = ((int)((P0 *)this)->prev_lock);
-		((P0 *)this)->prev_lock = 0;
+		(trpt+1)->bup.oval = ((int)((P0 *)this)->_2_prev);
+		((P0 *)this)->_2_prev = 0;
 #ifdef VAR_RANGES
-		logval("Thread:prev_lock", ((int)((P0 *)this)->prev_lock));
+		logval("Thread:prev", ((int)((P0 *)this)->_2_prev));
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 25: /* STATE 78 - line 63 "../../../gustedt_mutex2.pml" - [cur = 0] (0:0:1 - 1) */
+	case 30: /* STATE 78 - ../../../gustedt_mutex2.pml:61 - [cur = 0] (0:0:1 - 1) */
 		IfNotBlocked
 		reached[0][78] = 1;
-		(trpt+1)->bup.oval = ((int)((P0 *)this)->cur);
-		((P0 *)this)->cur = 0;
+		(trpt+1)->bup.oval = ((int)((P0 *)this)->_2_cur);
+		((P0 *)this)->_2_cur = 0;
 #ifdef VAR_RANGES
-		logval("Thread:cur", ((int)((P0 *)this)->cur));
+		logval("Thread:cur", ((int)((P0 *)this)->_2_cur));
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 26: /* STATE 80 - line 19 "../../../mutex_generic.pml" - [num_threads_in_cs = (num_threads_in_cs+1)] (0:0:1 - 1) */
+	case 31: /* STATE 80 - ../../../mutex_generic.pml:26 - [num_threads_in_cs = (num_threads_in_cs+1)] (0:0:1 - 1) */
 		IfNotBlocked
 		reached[0][80] = 1;
 		(trpt+1)->bup.oval = ((int)now.num_threads_in_cs);
@@ -391,7 +431,7 @@ S_071_0: /* 1 */
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 27: /* STATE 81 - line 20 "../../../mutex_generic.pml" - [num_threads_in_cs = (num_threads_in_cs-1)] (0:0:1 - 1) */
+	case 32: /* STATE 81 - ../../../mutex_generic.pml:27 - [num_threads_in_cs = (num_threads_in_cs-1)] (0:0:1 - 1) */
 		IfNotBlocked
 		reached[0][81] = 1;
 		(trpt+1)->bup.oval = ((int)now.num_threads_in_cs);
@@ -401,7 +441,7 @@ S_071_0: /* 1 */
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 28: /* STATE 88 - line 68 "../../../gustedt_mutex2.pml" - [D_STEP] */
+	case 33: /* STATE 88 - ../../../gustedt_mutex2.pml:65 - [D_STEP] */
 		IfNotBlocked
 		sv_save();
 		reached[0][88] = 1;
@@ -410,9 +450,9 @@ S_071_0: /* 1 */
 S_085_0: /* 2 */
 S_084_0: /* 2 */
 S_081_0: /* 2 */
-		((P0 *)this)->prev_unlock = ((int)now.futex.word);
+		((P0 *)this)->_2_prev = ((int)now.futex.word);
 #ifdef VAR_RANGES
-		logval("Thread:prev_unlock", ((int)((P0 *)this)->prev_unlock));
+		logval("Thread:prev", ((int)((P0 *)this)->_2_prev));
 #endif
 		;
 S_082_0: /* 2 */
@@ -429,7 +469,7 @@ S_083_0: /* 2 */
 		;
 		goto S_086_0;
 S_086_0: /* 2 */
-		Printf("T%d unlocks: set futex word from %d to %d\n", ((int)((P0 *)this)->_pid), ((int)((P0 *)this)->prev_unlock), ((int)now.futex.word));
+		Printf("T%d unlocks: set futex word from %d to %d\n", ((int)((P0 *)this)->_pid), ((int)((P0 *)this)->_2_prev), ((int)now.futex.word));
 		goto S_114_0;
 S_114_0: /* 1 */
 
@@ -438,69 +478,69 @@ S_114_0: /* 1 */
 #endif
 		_m = 3; goto P999;
 
-	case 29: /* STATE 89 - line 73 "../../../gustedt_mutex2.pml" - [((prev_unlock!=((1<<7)|1)))] (0:0:1 - 1) */
+	case 34: /* STATE 89 - ../../../gustedt_mutex2.pml:70 - [((prev!=((1<<7)|1)))] (0:0:1 - 1) */
 		IfNotBlocked
 		reached[0][89] = 1;
-		if (!((((int)((P0 *)this)->prev_unlock)!=((1<<7)|1))))
+		if (!((((int)((P0 *)this)->_2_prev)!=((1<<7)|1))))
 			continue;
-		/* dead 1: prev_unlock */  (trpt+1)->bup.oval = ((P0 *)this)->prev_unlock;
+		/* dead 1: _2_prev */  (trpt+1)->bup.oval = ((P0 *)this)->_2_prev;
 #ifdef HAS_CODE
 		if (!readtrail)
 #endif
-			((P0 *)this)->prev_unlock = 0;
+			((P0 *)this)->_2_prev = 0;
 		_m = 3; goto P999; /* 0 */
-	case 30: /* STATE 90 - line 70 "../../../futex.pml" - [assert(!(futex.wait[_pid]))] (0:107:1 - 1) */
+	case 35: /* STATE 90 - ../../../futex.pml:70 - [assert(!(futex.wait[_pid]))] (0:107:1 - 1) */
 		IfNotBlocked
 		reached[0][90] = 1;
-		assert( !(((int)now.futex.wait[ Index(((int)((P0 *)this)->_pid), 6) ])), " !(futex.wait[_pid])", II, tt, t);
+		spin_assert( !(((int)now.futex.wait[ Index(((int)((P0 *)this)->_pid), 6) ])), " !(futex.wait[_pid])", II, tt, t);
 		/* merge: num_woken = 0(107, 91, 107) */
 		reached[0][91] = 1;
-		(trpt+1)->bup.oval = ((int)((P0 *)this)->num_woken);
-		((P0 *)this)->num_woken = 0;
+		(trpt+1)->bup.oval = ((int)((P0 *)this)->_2_num_woken);
+		((P0 *)this)->_2_num_woken = 0;
 #ifdef VAR_RANGES
-		logval("Thread:num_woken", ((int)((P0 *)this)->num_woken));
+		logval("Thread:num_woken", ((int)((P0 *)this)->_2_num_woken));
 #endif
 		;
 		/* merge: .(goto)(0, 108, 107) */
 		reached[0][108] = 1;
 		;
 		_m = 3; goto P999; /* 2 */
-	case 31: /* STATE 92 - line 74 "../../../futex.pml" - [(((num_woken==1)||(futex.num_waiting==0)))] (121:0:2 - 1) */
+	case 36: /* STATE 92 - ../../../futex.pml:74 - [(((num_woken==1)||(futex.num_waiting==0)))] (121:0:2 - 1) */
 		IfNotBlocked
 		reached[0][92] = 1;
-		if (!(((((int)((P0 *)this)->num_woken)==1)||(((int)now.futex.num_waiting)==0))))
+		if (!(((((int)((P0 *)this)->_2_num_woken)==1)||(((int)now.futex.num_waiting)==0))))
 			continue;
 		/* merge: goto :b3(121, 93, 121) */
 		reached[0][93] = 1;
 		;
 		/* merge: printf('T%d woke up %d thread(s)\\n',_pid,num_woken)(121, 110, 121) */
 		reached[0][110] = 1;
-		Printf("T%d woke up %d thread(s)\n", ((int)((P0 *)this)->_pid), ((int)((P0 *)this)->num_woken));
+		Printf("T%d woke up %d thread(s)\n", ((int)((P0 *)this)->_pid), ((int)((P0 *)this)->_2_num_woken));
 		/* merge: num_woken = 0(121, 111, 121) */
 		reached[0][111] = 1;
 		(trpt+1)->bup.ovals = grab_ints(2);
-		(trpt+1)->bup.ovals[0] = ((int)((P0 *)this)->num_woken);
-		((P0 *)this)->num_woken = 0;
+		(trpt+1)->bup.ovals[0] = ((int)((P0 *)this)->_2_num_woken);
+		((P0 *)this)->_2_num_woken = 0;
 #ifdef VAR_RANGES
-		logval("Thread:num_woken", ((int)((P0 *)this)->num_woken));
+		logval("Thread:num_woken", ((int)((P0 *)this)->_2_num_woken));
 #endif
 		;
 		/* merge: .(goto)(121, 116, 121) */
 		reached[0][116] = 1;
 		;
-		/* merge: prev_unlock = 0(121, 117, 121) */
+		/* merge: prev = 0(121, 117, 121) */
 		reached[0][117] = 1;
-		(trpt+1)->bup.ovals[1] = ((int)((P0 *)this)->prev_unlock);
-		((P0 *)this)->prev_unlock = 0;
+		(trpt+1)->bup.ovals[1] = ((int)((P0 *)this)->_2_prev);
+		((P0 *)this)->_2_prev = 0;
 #ifdef VAR_RANGES
-		logval("Thread:prev_unlock", ((int)((P0 *)this)->prev_unlock));
+		logval("Thread:prev", ((int)((P0 *)this)->_2_prev));
 #endif
 		;
 		/* merge: .(goto)(0, 122, 121) */
 		reached[0][122] = 1;
 		;
 		_m = 3; goto P999; /* 6 */
-	case 32: /* STATE 95 - line 78 "../../../futex.pml" - [(futex.wait[1])] (107:0:3 - 1) */
+	case 37: /* STATE 95 - ../../../futex.pml:78 - [(futex.wait[1])] (107:0:3 - 1) */
 		IfNotBlocked
 		reached[0][95] = 1;
 		if (!(((int)now.futex.wait[1])))
@@ -527,17 +567,17 @@ S_114_0: /* 1 */
 		;
 		/* merge: num_woken = (num_woken+1)(107, 106, 107) */
 		reached[0][106] = 1;
-		(trpt+1)->bup.ovals[2] = ((int)((P0 *)this)->num_woken);
-		((P0 *)this)->num_woken = (((int)((P0 *)this)->num_woken)+1);
+		(trpt+1)->bup.ovals[2] = ((int)((P0 *)this)->_2_num_woken);
+		((P0 *)this)->_2_num_woken = (((int)((P0 *)this)->_2_num_woken)+1);
 #ifdef VAR_RANGES
-		logval("Thread:num_woken", ((int)((P0 *)this)->num_woken));
+		logval("Thread:num_woken", ((int)((P0 *)this)->_2_num_woken));
 #endif
 		;
 		/* merge: .(goto)(0, 108, 107) */
 		reached[0][108] = 1;
 		;
 		_m = 3; goto P999; /* 5 */
-	case 33: /* STATE 97 - line 80 "../../../futex.pml" - [(futex.wait[2])] (107:0:3 - 1) */
+	case 38: /* STATE 97 - ../../../futex.pml:80 - [(futex.wait[2])] (107:0:3 - 1) */
 		IfNotBlocked
 		reached[0][97] = 1;
 		if (!(((int)now.futex.wait[2])))
@@ -564,17 +604,17 @@ S_114_0: /* 1 */
 		;
 		/* merge: num_woken = (num_woken+1)(107, 106, 107) */
 		reached[0][106] = 1;
-		(trpt+1)->bup.ovals[2] = ((int)((P0 *)this)->num_woken);
-		((P0 *)this)->num_woken = (((int)((P0 *)this)->num_woken)+1);
+		(trpt+1)->bup.ovals[2] = ((int)((P0 *)this)->_2_num_woken);
+		((P0 *)this)->_2_num_woken = (((int)((P0 *)this)->_2_num_woken)+1);
 #ifdef VAR_RANGES
-		logval("Thread:num_woken", ((int)((P0 *)this)->num_woken));
+		logval("Thread:num_woken", ((int)((P0 *)this)->_2_num_woken));
 #endif
 		;
 		/* merge: .(goto)(0, 108, 107) */
 		reached[0][108] = 1;
 		;
 		_m = 3; goto P999; /* 5 */
-	case 34: /* STATE 99 - line 83 "../../../futex.pml" - [(futex.wait[3])] (107:0:3 - 1) */
+	case 39: /* STATE 99 - ../../../futex.pml:83 - [(futex.wait[3])] (107:0:3 - 1) */
 		IfNotBlocked
 		reached[0][99] = 1;
 		if (!(((int)now.futex.wait[3])))
@@ -601,17 +641,17 @@ S_114_0: /* 1 */
 		;
 		/* merge: num_woken = (num_woken+1)(107, 106, 107) */
 		reached[0][106] = 1;
-		(trpt+1)->bup.ovals[2] = ((int)((P0 *)this)->num_woken);
-		((P0 *)this)->num_woken = (((int)((P0 *)this)->num_woken)+1);
+		(trpt+1)->bup.ovals[2] = ((int)((P0 *)this)->_2_num_woken);
+		((P0 *)this)->_2_num_woken = (((int)((P0 *)this)->_2_num_woken)+1);
 #ifdef VAR_RANGES
-		logval("Thread:num_woken", ((int)((P0 *)this)->num_woken));
+		logval("Thread:num_woken", ((int)((P0 *)this)->_2_num_woken));
 #endif
 		;
 		/* merge: .(goto)(0, 108, 107) */
 		reached[0][108] = 1;
 		;
 		_m = 3; goto P999; /* 5 */
-	case 35: /* STATE 101 - line 87 "../../../futex.pml" - [(futex.wait[4])] (107:0:3 - 1) */
+	case 40: /* STATE 101 - ../../../futex.pml:87 - [(futex.wait[4])] (107:0:3 - 1) */
 		IfNotBlocked
 		reached[0][101] = 1;
 		if (!(((int)now.futex.wait[4])))
@@ -638,17 +678,17 @@ S_114_0: /* 1 */
 		;
 		/* merge: num_woken = (num_woken+1)(107, 106, 107) */
 		reached[0][106] = 1;
-		(trpt+1)->bup.ovals[2] = ((int)((P0 *)this)->num_woken);
-		((P0 *)this)->num_woken = (((int)((P0 *)this)->num_woken)+1);
+		(trpt+1)->bup.ovals[2] = ((int)((P0 *)this)->_2_num_woken);
+		((P0 *)this)->_2_num_woken = (((int)((P0 *)this)->_2_num_woken)+1);
 #ifdef VAR_RANGES
-		logval("Thread:num_woken", ((int)((P0 *)this)->num_woken));
+		logval("Thread:num_woken", ((int)((P0 *)this)->_2_num_woken));
 #endif
 		;
 		/* merge: .(goto)(0, 108, 107) */
 		reached[0][108] = 1;
 		;
 		_m = 3; goto P999; /* 5 */
-	case 36: /* STATE 105 - line 89 "../../../futex.pml" - [futex.num_waiting = (futex.num_waiting-1)] (0:107:2 - 5) */
+	case 41: /* STATE 105 - ../../../futex.pml:89 - [futex.num_waiting = (futex.num_waiting-1)] (0:107:2 - 5) */
 		IfNotBlocked
 		reached[0][105] = 1;
 		(trpt+1)->bup.ovals = grab_ints(2);
@@ -660,63 +700,63 @@ S_114_0: /* 1 */
 		;
 		/* merge: num_woken = (num_woken+1)(107, 106, 107) */
 		reached[0][106] = 1;
-		(trpt+1)->bup.ovals[1] = ((int)((P0 *)this)->num_woken);
-		((P0 *)this)->num_woken = (((int)((P0 *)this)->num_woken)+1);
+		(trpt+1)->bup.ovals[1] = ((int)((P0 *)this)->_2_num_woken);
+		((P0 *)this)->_2_num_woken = (((int)((P0 *)this)->_2_num_woken)+1);
 #ifdef VAR_RANGES
-		logval("Thread:num_woken", ((int)((P0 *)this)->num_woken));
+		logval("Thread:num_woken", ((int)((P0 *)this)->_2_num_woken));
 #endif
 		;
 		/* merge: .(goto)(0, 108, 107) */
 		reached[0][108] = 1;
 		;
 		_m = 3; goto P999; /* 2 */
-	case 37: /* STATE 110 - line 92 "../../../futex.pml" - [printf('T%d woke up %d thread(s)\\n',_pid,num_woken)] (0:121:2 - 3) */
+	case 42: /* STATE 110 - ../../../futex.pml:92 - [printf('T%d woke up %d thread(s)\\n',_pid,num_woken)] (0:121:2 - 3) */
 		IfNotBlocked
 		reached[0][110] = 1;
-		Printf("T%d woke up %d thread(s)\n", ((int)((P0 *)this)->_pid), ((int)((P0 *)this)->num_woken));
+		Printf("T%d woke up %d thread(s)\n", ((int)((P0 *)this)->_pid), ((int)((P0 *)this)->_2_num_woken));
 		/* merge: num_woken = 0(121, 111, 121) */
 		reached[0][111] = 1;
 		(trpt+1)->bup.ovals = grab_ints(2);
-		(trpt+1)->bup.ovals[0] = ((int)((P0 *)this)->num_woken);
-		((P0 *)this)->num_woken = 0;
+		(trpt+1)->bup.ovals[0] = ((int)((P0 *)this)->_2_num_woken);
+		((P0 *)this)->_2_num_woken = 0;
 #ifdef VAR_RANGES
-		logval("Thread:num_woken", ((int)((P0 *)this)->num_woken));
+		logval("Thread:num_woken", ((int)((P0 *)this)->_2_num_woken));
 #endif
 		;
 		/* merge: .(goto)(121, 116, 121) */
 		reached[0][116] = 1;
 		;
-		/* merge: prev_unlock = 0(121, 117, 121) */
+		/* merge: prev = 0(121, 117, 121) */
 		reached[0][117] = 1;
-		(trpt+1)->bup.ovals[1] = ((int)((P0 *)this)->prev_unlock);
-		((P0 *)this)->prev_unlock = 0;
+		(trpt+1)->bup.ovals[1] = ((int)((P0 *)this)->_2_prev);
+		((P0 *)this)->_2_prev = 0;
 #ifdef VAR_RANGES
-		logval("Thread:prev_unlock", ((int)((P0 *)this)->prev_unlock));
+		logval("Thread:prev", ((int)((P0 *)this)->_2_prev));
 #endif
 		;
 		/* merge: .(goto)(0, 122, 121) */
 		reached[0][122] = 1;
 		;
 		_m = 3; goto P999; /* 4 */
-	case 38: /* STATE 117 - line 76 "../../../gustedt_mutex2.pml" - [prev_unlock = 0] (0:121:1 - 3) */
+	case 43: /* STATE 117 - ../../../gustedt_mutex2.pml:73 - [prev = 0] (0:121:1 - 3) */
 		IfNotBlocked
 		reached[0][117] = 1;
-		(trpt+1)->bup.oval = ((int)((P0 *)this)->prev_unlock);
-		((P0 *)this)->prev_unlock = 0;
+		(trpt+1)->bup.oval = ((int)((P0 *)this)->_2_prev);
+		((P0 *)this)->_2_prev = 0;
 #ifdef VAR_RANGES
-		logval("Thread:prev_unlock", ((int)((P0 *)this)->prev_unlock));
+		logval("Thread:prev", ((int)((P0 *)this)->_2_prev));
 #endif
 		;
 		/* merge: .(goto)(0, 122, 121) */
 		reached[0][122] = 1;
 		;
 		_m = 3; goto P999; /* 1 */
-	case 39: /* STATE 119 - line 22 "../../../mutex_generic.pml" - [printf('T%d is done\\n',_pid)] (0:0:0 - 1) */
+	case 44: /* STATE 119 - ../../../mutex_generic.pml:29 - [printf('T%d is done\\n',_pid)] (0:0:0 - 1) */
 		IfNotBlocked
 		reached[0][119] = 1;
 		Printf("T%d is done\n", ((int)((P0 *)this)->_pid));
 		_m = 3; goto P999; /* 0 */
-	case 40: /* STATE 124 - line 24 "../../../mutex_generic.pml" - [-end-] (0:0:0 - 3) */
+	case 45: /* STATE 124 - ../../../mutex_generic.pml:31 - [-end-] (0:0:0 - 3) */
 		IfNotBlocked
 		reached[0][124] = 1;
 		if (!delproc(1, II)) continue;

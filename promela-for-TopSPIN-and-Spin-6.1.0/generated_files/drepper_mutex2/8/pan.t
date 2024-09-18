@@ -12,7 +12,7 @@ tr_2_src(int m, char *file, int ln)
 void
 putpeg(int n, int m)
 {	printf("%5d	trans %4d ", m, n);
-	printf("file %s line %3d\n",
+	printf("%s:%d\n",
 		T_SRC[n].fl, T_SRC[n].ln);
 }
 #endif
@@ -31,15 +31,15 @@ settable(void)
 	T = trans[ 2][10] = settr(128,2,0,0,0,"ATOMIC", 0, 2, 0);
 	T->nxt	= settr(128,2,1,0,0,"ATOMIC", 0, 2, 0);
 	trans[2][1]	= settr(119,2,2,3,3,"(run Thread())", 0, 2, 0);
-	trans[2][2]	= /* c */ settr(120,2,3,3,3,"(run Thread())", 0, 2, 0);
-	trans[2][3]	= /* c */ settr(121,2,4,3,3,"(run Thread())", 0, 2, 0);
-	trans[2][4]	= /* c */ settr(122,2,5,3,3,"(run Thread())", 0, 2, 0);
-	trans[2][5]	= /* c */ settr(123,2,6,3,3,"(run Thread())", 0, 2, 0);
-	trans[2][6]	= /* c */ settr(124,2,7,3,3,"(run Thread())", 0, 2, 0);
-	trans[2][7]	= /* c */ settr(125,2,8,3,3,"(run Thread())", 0, 2, 0);
-	trans[2][8]	= /* c */ settr(126,2,9,3,3,"(run Thread())", 0, 2, 0);
-	trans[2][9]	= settr(127,0,11,4,4,"(run Monitor())", 0, 2, 0);
-	trans[2][11]	= settr(129,0,0,5,5,"-end-", 0, 3500, 0);
+	trans[2][2]	= settr(120,2,3,4,4,"(run Thread())", 0, 2, 0);
+	trans[2][3]	= settr(121,2,4,5,5,"(run Thread())", 0, 2, 0);
+	trans[2][4]	= settr(122,2,5,6,6,"(run Thread())", 0, 2, 0);
+	trans[2][5]	= settr(123,2,6,7,7,"(run Thread())", 0, 2, 0);
+	trans[2][6]	= settr(124,2,7,8,8,"(run Thread())", 0, 2, 0);
+	trans[2][7]	= settr(125,2,8,9,9,"(run Thread())", 0, 2, 0);
+	trans[2][8]	= settr(126,2,9,10,10,"(run Thread())", 0, 2, 0);
+	trans[2][9]	= settr(127,0,11,11,11,"(run Monitor())", 0, 2, 0);
+	trans[2][11]	= settr(129,0,0,12,12,"-end-", 0, 3500, 0);
 
 	/* proctype 1: Monitor */
 
@@ -47,10 +47,10 @@ settable(void)
 
 	T = trans[ 1][3] = settr(117,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(117,2,1,0,0,"ATOMIC", 1, 2, 0);
-	trans[1][1]	= settr(115,4,4,6,6,"((num_threads_in_cs>1))", 1, 2, 0); /* m: 2 -> 4,0 */
+	trans[1][1]	= settr(115,4,4,13,13,"((num_threads_in_cs>1))", 1, 2, 0); /* m: 2 -> 4,0 */
 	reached1[2] = 1;
 	trans[1][2]	= settr(0,0,0,0,0,"assert(0)",0,0,0);
-	trans[1][4]	= settr(118,0,0,7,7,"-end-", 0, 3500, 0);
+	trans[1][4]	= settr(118,0,0,14,14,"-end-", 0, 3500, 0);
 
 	/* proctype 0: Thread */
 
@@ -66,17 +66,17 @@ settable(void)
 	T->nxt	= settr(11,2,4,0,0,"ATOMIC", 1, 2, 0);
 	T = trans[ 0][4] = settr(3,0,0,0,0,"sub-sequence", 1, 2, 0);
 	T->nxt	= settr(3,0,3,0,0,"sub-sequence", 1, 2, 0);
-/*->*/	trans[0][3]	= settr(2,34,10,8,8,"D_STEP", 1, 2, 0);
+/*->*/	trans[0][3]	= settr(2,34,10,15,15,"D_STEP", 1, 2, 0);
 	T = trans[0][10] = settr(9,2,0,0,0,"IF", 1, 2, 0);
 	T = T->nxt	= settr(9,2,5,0,0,"IF", 1, 2, 0);
 	    T->nxt	= settr(9,2,8,0,0,"IF", 1, 2, 0);
-	trans[0][5]	= settr(4,4,58,9,9,"((old_value_lock==0))", 1, 2, 0); /* m: 6 -> 58,0 */
+	trans[0][5]	= settr(4,4,58,16,16,"((old_value==0))", 1, 2, 0); /* m: 6 -> 58,0 */
 	reached0[6] = 1;
 	trans[0][6]	= settr(0,0,0,0,0,"printf('T%d locks mutex on fast path\\n',_pid)",0,0,0);
 	trans[0][7]	= settr(6,0,58,1,0,"goto acquired_mutex", 1, 2, 0);
-	trans[0][11]	= settr(10,0,55,10,10,".(goto)", 1, 2, 0);
+	trans[0][11]	= settr(10,0,55,17,17,".(goto)", 1, 2, 0);
 	trans[0][8]	= settr(7,2,9,2,0,"else", 1, 2, 0);
-	trans[0][9]	= settr(8,0,55,11,11,"printf('T%d fails to lock mutex on fast path\\n',_pid)", 1, 2, 0); /* m: 11 -> 0,55 */
+	trans[0][9]	= settr(8,0,55,18,18,"printf('T%d fails to lock mutex on fast path\\n',_pid)", 1, 2, 0); /* m: 11 -> 0,55 */
 	reached0[11] = 1;
 	trans[0][56]	= settr(55,0,55,1,0,".(goto)", 0, 2, 0);
 	T = trans[0][55] = settr(54,0,0,0,0,"DO", 0, 2, 0);
@@ -86,21 +86,21 @@ settable(void)
 	T = trans[0][25] = settr(24,2,0,0,0,"IF", 1, 2, 0);
 	T = T->nxt	= settr(24,2,13,0,0,"IF", 1, 2, 0);
 	    T->nxt	= settr(24,2,14,0,0,"IF", 1, 2, 0);
-	trans[0][13]	= settr(12,4,42,12,12,"((old_value_lock==2))", 1, 2, 0); /* m: 26 -> 42,0 */
+	trans[0][13]	= settr(12,4,42,19,19,"((old_value==2))", 1, 2, 0); /* m: 26 -> 42,0 */
 	reached0[26] = 1;
-	trans[0][26]	= settr(25,0,42,13,13,".(goto)", 1, 2, 0);
+	trans[0][26]	= settr(25,0,42,20,20,".(goto)", 1, 2, 0);
 	trans[0][14]	= settr(13,2,15,2,0,"else", 1, 2, 0);
-	trans[0][15]	= settr(14,2,19,14,0,"assert((old_value_lock==1))", 1, 2, 0);
+	trans[0][15]	= settr(14,2,19,21,0,"assert((old_value==1))", 1, 2, 0);
 	T = trans[ 0][19] = settr(18,0,0,0,0,"sub-sequence", 1, 2, 0);
 	T->nxt	= settr(18,0,18,0,0,"sub-sequence", 1, 2, 0);
-/*->*/	trans[0][18]	= settr(17,34,23,15,15,"D_STEP", 1, 2, 0);
+/*->*/	trans[0][18]	= settr(17,34,23,22,22,"D_STEP", 1, 2, 0);
 	T = trans[0][23] = settr(22,2,0,0,0,"IF", 1, 2, 0);
 	T = T->nxt	= settr(22,2,20,0,0,"IF", 1, 2, 0);
 	    T->nxt	= settr(22,2,22,0,0,"IF", 1, 2, 0);
-	trans[0][20]	= settr(19,4,54,16,16,"((old_value_lock==0))", 1, 2, 0); /* m: 21 -> 54,0 */
+	trans[0][20]	= settr(19,4,54,23,23,"((old_value==0))", 1, 2, 0); /* m: 21 -> 54,0 */
 	reached0[21] = 1;
 	trans[0][21]	= settr(20,0,54,1,0,"goto retry", 1, 2, 0);
-	trans[0][24]	= settr(23,4,42,17,17,".(goto)", 1, 2, 0); /* m: 26 -> 0,42 */
+	trans[0][24]	= settr(23,4,42,24,24,".(goto)", 1, 2, 0); /* m: 26 -> 0,42 */
 	reached0[26] = 1;
 	trans[0][22]	= settr(21,2,24,2,0,"else", 1, 2, 0);
 	T = trans[ 0][42] = settr(41,0,0,0,0,"sub-sequence", 0, 2, 0);
@@ -108,49 +108,49 @@ settable(void)
 	T = trans[0][40] = settr(39,0,0,0,0,"IF", 0, 2, 0);
 	T = T->nxt	= settr(39,0,33,0,0,"IF", 0, 2, 0);
 	    T->nxt	= settr(39,0,39,0,0,"IF", 0, 2, 0);
-/*->*/	trans[0][33]	= settr(32,32,36,18,18,"D_STEP", 1, 2, 0);
-/*->*/	trans[0][36]	= settr(35,32,54,19,19,"D_STEP", 1, 2, 0);
+/*->*/	trans[0][33]	= settr(32,32,36,25,25,"D_STEP", 1, 2, 0);
+/*->*/	trans[0][36]	= settr(35,32,54,26,26,"D_STEP", 1, 2, 0);
 	trans[0][41]	= settr(40,0,54,1,0,".(goto)", 0, 2, 0);
-/*->*/	trans[0][39]	= settr(38,32,54,20,20,"D_STEP", 1, 2, 0);
+/*->*/	trans[0][39]	= settr(38,32,54,27,27,"D_STEP", 1, 2, 0);
 	T = trans[ 0][54] = settr(53,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(53,2,46,0,0,"ATOMIC", 1, 2, 0);
 	T = trans[ 0][46] = settr(45,0,0,0,0,"sub-sequence", 1, 2, 0);
 	T->nxt	= settr(45,0,45,0,0,"sub-sequence", 1, 2, 0);
-/*->*/	trans[0][45]	= settr(44,34,52,21,21,"D_STEP", 1, 2, 0);
+/*->*/	trans[0][45]	= settr(44,34,52,28,28,"D_STEP", 1, 2, 0);
 	T = trans[0][52] = settr(51,2,0,0,0,"IF", 1, 2, 0);
 	T = T->nxt	= settr(51,2,47,0,0,"IF", 1, 2, 0);
 	    T->nxt	= settr(51,2,50,0,0,"IF", 1, 2, 0);
-	trans[0][47]	= settr(46,4,58,22,22,"((old_value_lock==0))", 1, 2, 0); /* m: 48 -> 58,0 */
+	trans[0][47]	= settr(46,4,58,29,29,"((old_value==0))", 1, 2, 0); /* m: 48 -> 58,0 */
 	reached0[48] = 1;
 	trans[0][48]	= settr(0,0,0,0,0,"printf('T%d locks mutex on slow path\\n',_pid)",0,0,0);
 	trans[0][49]	= settr(48,0,58,1,0,"goto acquired_mutex", 1, 2, 0);
-	trans[0][53]	= settr(52,0,55,23,23,".(goto)", 1, 2, 0);
+	trans[0][53]	= settr(52,0,55,30,30,".(goto)", 1, 2, 0);
 	trans[0][50]	= settr(49,2,51,2,0,"else", 1, 2, 0);
-	trans[0][51]	= settr(50,0,55,24,24,"printf('T%d fails to lock mutex on slow path\\n',_pid)", 1, 2, 0); /* m: 53 -> 0,55 */
+	trans[0][51]	= settr(50,0,55,31,31,"printf('T%d fails to lock mutex on slow path\\n',_pid)", 1, 2, 0); /* m: 53 -> 0,55 */
 	reached0[53] = 1;
 	trans[0][57]	= settr(56,0,58,1,0,"break", 0, 2, 0);
 	trans[0][58]	= settr(57,0,60,1,0,"(1)", 0, 2, 0);
-	trans[0][60]	= settr(59,0,61,25,25,"num_threads_in_cs = (num_threads_in_cs+1)", 1, 2, 0);
-	trans[0][61]	= settr(60,0,109,26,26,"num_threads_in_cs = (num_threads_in_cs-1)", 1, 2, 0);
+	trans[0][60]	= settr(59,0,61,32,32,"num_threads_in_cs = (num_threads_in_cs+1)", 1, 2, 0);
+	trans[0][61]	= settr(60,0,109,33,33,"num_threads_in_cs = (num_threads_in_cs-1)", 1, 2, 0);
 	T = trans[ 0][109] = settr(108,0,0,0,0,"sub-sequence", 0, 2, 0);
 	T->nxt	= settr(108,0,67,0,0,"sub-sequence", 0, 2, 0);
-/*->*/	trans[0][67]	= settr(66,32,107,27,27,"D_STEP", 1, 2, 0);
+/*->*/	trans[0][67]	= settr(66,32,107,34,34,"D_STEP", 1, 2, 0);
 	T = trans[0][107] = settr(106,0,0,0,0,"IF", 0, 2, 0);
 	T = T->nxt	= settr(106,0,71,0,0,"IF", 0, 2, 0);
 	    T->nxt	= settr(106,0,106,0,0,"IF", 0, 2, 0);
-/*->*/	trans[0][71]	= settr(70,32,103,28,28,"D_STEP", 1, 2, 0);
+/*->*/	trans[0][71]	= settr(70,32,103,35,35,"D_STEP", 1, 2, 0);
 	T = trans[ 0][103] = settr(102,0,0,0,0,"sub-sequence", 0, 2, 0);
 	T->nxt	= settr(102,0,102,0,0,"sub-sequence", 0, 2, 0);
 	T = trans[ 0][102] = settr(101,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(101,2,72,0,0,"ATOMIC", 1, 2, 0);
-	trans[0][72]	= settr(71,2,97,29,29,"assert(!(futex.wait[_pid]))", 1, 2, 0); /* m: 73 -> 0,97 */
+	trans[0][72]	= settr(71,2,97,36,36,"assert(!(futex.wait[_pid]))", 1, 2, 0); /* m: 73 -> 0,97 */
 	reached0[73] = 1;
 	trans[0][73]	= settr(0,0,0,0,0,"num_woken = 0",0,0,0);
 	trans[0][98]	= settr(97,2,97,1,0,".(goto)", 1, 2, 0);
 	T = trans[0][97] = settr(96,2,0,0,0,"DO", 1, 2, 0);
 	T = T->nxt	= settr(96,2,74,0,0,"DO", 1, 2, 0);
 	    T->nxt	= settr(96,2,76,0,0,"DO", 1, 2, 0);
-	trans[0][74]	= settr(73,0,112,30,30,"(((num_woken==1)||(futex.num_waiting==0)))", 1, 2, 0); /* m: 100 -> 112,0 */
+	trans[0][74]	= settr(73,0,112,37,37,"(((num_woken==1)||(futex.num_waiting==0)))", 1, 2, 0); /* m: 100 -> 112,0 */
 	reached0[100] = 1;
 	trans[0][75]	= settr(74,2,100,1,0,"goto :b2", 1, 2, 0); /* m: 100 -> 0,112 */
 	reached0[100] = 1;
@@ -164,45 +164,45 @@ settable(void)
 	T = T->nxt	= settr(92,2,87,0,0,"IF", 1, 2, 0);
 	T = T->nxt	= settr(92,2,89,0,0,"IF", 1, 2, 0);
 	    T->nxt	= settr(92,2,91,0,0,"IF", 1, 2, 0);
-	trans[0][77]	= settr(76,2,97,31,31,"(futex.wait[1])", 1, 2, 0); /* m: 78 -> 97,0 */
+	trans[0][77]	= settr(76,2,97,38,38,"(futex.wait[1])", 1, 2, 0); /* m: 78 -> 97,0 */
 	reached0[78] = 1;
 	trans[0][78]	= settr(0,0,0,0,0,"futex.wait[1] = 0",0,0,0);
 	trans[0][94]	= settr(93,2,95,1,0,".(goto)", 1, 2, 0); /* m: 95 -> 0,97 */
 	reached0[95] = 1;
-	trans[0][79]	= settr(78,2,97,32,32,"(futex.wait[2])", 1, 2, 0); /* m: 80 -> 97,0 */
+	trans[0][79]	= settr(78,2,97,39,39,"(futex.wait[2])", 1, 2, 0); /* m: 80 -> 97,0 */
 	reached0[80] = 1;
 	trans[0][80]	= settr(0,0,0,0,0,"futex.wait[2] = 0",0,0,0);
-	trans[0][81]	= settr(80,2,97,33,33,"(futex.wait[3])", 1, 2, 0); /* m: 82 -> 97,0 */
+	trans[0][81]	= settr(80,2,97,40,40,"(futex.wait[3])", 1, 2, 0); /* m: 82 -> 97,0 */
 	reached0[82] = 1;
 	trans[0][82]	= settr(0,0,0,0,0,"futex.wait[3] = 0",0,0,0);
-	trans[0][83]	= settr(82,2,97,34,34,"(futex.wait[4])", 1, 2, 0); /* m: 84 -> 97,0 */
+	trans[0][83]	= settr(82,2,97,41,41,"(futex.wait[4])", 1, 2, 0); /* m: 84 -> 97,0 */
 	reached0[84] = 1;
 	trans[0][84]	= settr(0,0,0,0,0,"futex.wait[4] = 0",0,0,0);
-	trans[0][85]	= settr(84,2,97,35,35,"(futex.wait[5])", 1, 2, 0); /* m: 86 -> 97,0 */
+	trans[0][85]	= settr(84,2,97,42,42,"(futex.wait[5])", 1, 2, 0); /* m: 86 -> 97,0 */
 	reached0[86] = 1;
 	trans[0][86]	= settr(0,0,0,0,0,"futex.wait[5] = 0",0,0,0);
-	trans[0][87]	= settr(86,2,97,36,36,"(futex.wait[6])", 1, 2, 0); /* m: 88 -> 97,0 */
+	trans[0][87]	= settr(86,2,97,43,43,"(futex.wait[6])", 1, 2, 0); /* m: 88 -> 97,0 */
 	reached0[88] = 1;
 	trans[0][88]	= settr(0,0,0,0,0,"futex.wait[6] = 0",0,0,0);
-	trans[0][89]	= settr(88,2,97,37,37,"(futex.wait[7])", 1, 2, 0); /* m: 90 -> 97,0 */
+	trans[0][89]	= settr(88,2,97,44,44,"(futex.wait[7])", 1, 2, 0); /* m: 90 -> 97,0 */
 	reached0[90] = 1;
 	trans[0][90]	= settr(0,0,0,0,0,"futex.wait[7] = 0",0,0,0);
-	trans[0][91]	= settr(90,2,97,38,38,"(futex.wait[8])", 1, 2, 0); /* m: 92 -> 97,0 */
+	trans[0][91]	= settr(90,2,97,45,45,"(futex.wait[8])", 1, 2, 0); /* m: 92 -> 97,0 */
 	reached0[92] = 1;
 	trans[0][92]	= settr(0,0,0,0,0,"futex.wait[8] = 0",0,0,0);
-	trans[0][95]	= settr(94,2,97,39,39,"futex.num_waiting = (futex.num_waiting-1)", 1, 2, 0); /* m: 96 -> 0,97 */
+	trans[0][95]	= settr(94,2,97,46,46,"futex.num_waiting = (futex.num_waiting-1)", 1, 2, 0); /* m: 96 -> 0,97 */
 	reached0[96] = 1;
 	trans[0][96]	= settr(0,0,0,0,0,"num_woken = (num_woken+1)",0,0,0);
 	trans[0][99]	= settr(98,2,100,1,0,"break", 1, 2, 0);
-	trans[0][100]	= settr(99,0,112,40,40,"printf('T%d woke up %d thread(s)\\n',_pid,num_woken)", 1, 2, 0); /* m: 101 -> 0,112 */
+	trans[0][100]	= settr(99,0,112,47,47,"printf('T%d woke up %d thread(s)\\n',_pid,num_woken)", 1, 2, 0); /* m: 101 -> 0,112 */
 	reached0[101] = 1;
 	trans[0][101]	= settr(0,0,0,0,0,"num_woken = 0",0,0,0);
 	trans[0][108]	= settr(107,0,112,1,0,".(goto)", 0, 2, 0);
-/*->*/	trans[0][106]	= settr(105,32,112,41,41,"D_STEP", 0, 2, 0);
-	trans[0][110]	= settr(109,0,115,42,0,"printf('T%d is done\\n',_pid)", 0, 2, 0);
+/*->*/	trans[0][106]	= settr(105,32,112,48,48,"D_STEP", 0, 2, 0);
+	trans[0][110]	= settr(109,0,115,49,0,"printf('T%d is done\\n',_pid)", 0, 2, 0);
 	trans[0][111]	= settr(110,0,115,1,0,"goto :b0", 0, 2, 0);
 	trans[0][114]	= settr(113,0,115,1,0,"break", 0, 2, 0);
-	trans[0][115]	= settr(114,0,0,43,43,"-end-", 0, 3500, 0);
+	trans[0][115]	= settr(114,0,0,50,50,"-end-", 0, 3500, 0);
 	/* np_ demon: */
 	trans[_NP_] = (Trans **) emalloc(2*sizeof(Trans *));
 	T = trans[_NP_][0] = settr(9997,0,1,_T5,0,"(np_)", 1,2,0);
@@ -320,7 +320,7 @@ mark_safety(Trans *t) /* for conditional safety */
 void
 retrans(int n, int m, int is, short srcln[], uchar reach[], uchar lstate[])
 	/* process n, with m states, is=initial state */
-{	Trans *T0, *T1, *T2, *T3;
+{	Trans *T0, *T1, *T2, *T3, *T4, *T5;
 	int i, k;
 #ifndef NOREDUCE
 	int g, h, j, aa;
@@ -329,7 +329,7 @@ retrans(int n, int m, int is, short srcln[], uchar reach[], uchar lstate[])
 	int p;
 #endif
 	if (state_tables >= 4)
-	{	printf("STEP 1 proctype %s\n", 
+	{	printf("STEP 1 %s\n", 
 			procname[n]);
 		for (i = 1; i < m; i++)
 		for (T0 = trans[n][i]; T0; T0 = T0->nxt)
@@ -369,7 +369,7 @@ retrans(int n, int m, int is, short srcln[], uchar reach[], uchar lstate[])
 		}
 	} while (cnt);
 	if (state_tables >= 3)
-	{	printf("STEP 2 proctype %s\n", 
+	{	printf("STEP 2 %s\n", 
 			procname[n]);
 		for (i = 1; i < m; i++)
 		for (T0 = trans[n][i]; T0; T0 = T0->nxt)
@@ -383,6 +383,8 @@ retrans(int n, int m, int is, short srcln[], uchar reach[], uchar lstate[])
 			printf("\t\tpull %d (%d) to %d\n",
 			T1->st, T1->forw, i);
 #endif
+			srcln[i] = srcln[T1->st];	/* Oyvind Teig, 5.2.0 */
+
 			if (!trans[n][T1->st]) continue;
 			T0 = cpytr(trans[n][T1->st]);
 			trans[n][i] = T0;
@@ -394,6 +396,7 @@ retrans(int n, int m, int is, short srcln[], uchar reach[], uchar lstate[])
 			printf("\t\tpull %d (%d) to %d\n",
 				T1->st, T1->forw, i);
 #endif
+		/*		srcln[i] = srcln[T1->st];  gh: not useful */
 				if (!trans[n][T1->st]) continue;
 				T0->nxt = cpytr(trans[n][T1->st]);
 				T0 = T0->nxt;
@@ -401,7 +404,7 @@ retrans(int n, int m, int is, short srcln[], uchar reach[], uchar lstate[])
 				imed(T0, T1->st, n, i);
 	}	}	}
 	if (state_tables >= 2)
-	{	printf("STEP 3 proctype %s\n", 
+	{	printf("STEP 3 %s\n", 
 			procname[n]);
 		for (i = 1; i < m; i++)
 		for (T0 = trans[n][i]; T0; T0 = T0->nxt)
@@ -430,8 +433,7 @@ retrans(int n, int m, int is, short srcln[], uchar reach[], uchar lstate[])
 				trans[n][i] = T2;
 		}	}
 	 } else /* outermost unless checked first */
-	 {	Trans *T4;
-		T4 = T3 = (Trans *) 0;
+	 {	T4 = T3 = (Trans *) 0;
 		for (T0 = trans[n][i]; T0; T0 = T0->nxt)
 		for (k = HAS_UNLESS-1; k >= 0; k--)
 		{	if (p = T0->escp[k])
@@ -555,19 +557,43 @@ degrade:	for (T1 = trans[n][i]; T1; T1 = T1->nxt)
 			continue;
 		stopstate[n][T2->st] = 1;
 	}
-	if (state_tables)
-	{	printf("proctype ");
-		if (!strcmp(procname[n], ":init:"))
-			printf("init\n");
-		else
-			printf("%s\n", procname[n]);
+	if (state_tables && !verbose)
+	{	if (dodot)
+		{	char buf[256], *q = buf, *p = procname[n];
+			while (*p != '\0')
+			{	if (*p != ':')
+				{	*q++ = *p;
+				}
+				p++;
+			}
+			*q = '\0';
+			printf("digraph ");
+			switch (Btypes[n]) {
+			case I_PROC:  printf("init {\n"); break;
+			case N_CLAIM: printf("claim_%s {\n", buf); break;
+			case E_TRACE: printf("notrace {\n"); break;
+			case N_TRACE: printf("trace {\n"); break;
+			default:      printf("p_%s {\n", buf); break;
+			}
+			printf("size=\"8,10\";\n");
+			printf("  GT [shape=box,style=dotted,label=\"%s\"];\n", buf);
+		} else
+		{	switch (Btypes[n]) {
+			case I_PROC:  printf("init\n"); break;
+			case N_CLAIM: printf("claim %s\n", procname[n]); break;
+			case E_TRACE: printf("notrace assertion\n"); break;
+			case N_TRACE: printf("trace assertion\n"); break;
+			default:      printf("proctype %s\n", procname[n]); break;
+		}	}
 		for (i = 1; i < m; i++)
-			reach[i] = 1;
+		{	reach[i] = 1;
+		}
 		tagtable(n, m, is, srcln, reach);
+		if (dodot) printf("}\n");
 	} else
 	for (i = 1; i < m; i++)
 	{	int nrelse;
-		if (strcmp(procname[n], ":never:") != 0)
+		if (Btypes[n] != N_CLAIM)
 		{	for (T0 = trans[n][i]; T0; T0 = T0->nxt)
 			{	if (T0->st == i
 				&& strcmp(T0->tp, "(1)") == 0)
@@ -590,42 +616,74 @@ degrade:	for (T1 = trans[n][i]; T1; T1 = T1->nxt)
 		  	printf(" 'else' stmnts\n");
 			pan_exit(1);
 	}	}
-	if (!state_tables && strcmp(procname[n], ":never:") == 0)
-	{	int h = 0;
-		for (i = 1; i < m; i++)
-		for (T0 = trans[n][i]; T0; T0 = T0->nxt)
-			if (T0->forw > h) h = T0->forw;
-		h++;
-		frm_st0 = (short *) emalloc(h * sizeof(short));
-		for (i = 1; i < m; i++)
-		for (T0 = trans[n][i]; T0; T0 = T0->nxt)
-			frm_st0[T0->forw] = i;
-	}
 #ifndef LOOPSTATE
 	if (state_tables)
 #endif
 	do_dfs(n, m, is, srcln, reach, lstate);
 #ifdef T_REVERSE
 	/* process n, with m states, is=initial state -- reverse list */
-	if (!state_tables && strcmp(procname[n], ":never:") != 0)
+	if (!state_tables && Btypes[n] != N_CLAIM)
 	{	for (i = 1; i < m; i++)
-		{	Trans *T4 = (Trans *) 0;
-			T1 = (Trans *) 0;
-			T2 = (Trans *) 0;
+		{	Trans *Tx = (Trans *) 0; /* list of escapes */
+			Trans *Ty = (Trans *) 0; /* its tail element */
+			T1 = (Trans *) 0; /* reversed list */
+			T2 = (Trans *) 0; /* its tail */
+			T3 = (Trans *) 0; /* remembers possible 'else' */
+
+			/* find unless-escapes, they should go first */
+			T4 = T5 = T0 = trans[n][i];
+#ifdef HAS_UNLESS
+			while (T4 && T4->e_trans) /* escapes are first in orig list */
+			{	T5 = T4;	  /* remember predecessor */
+				T4 = T4->nxt;
+			}
+#endif
+			/* T4 points to first non-escape, T5 to its parent, T0 to original list */
+			if (T4 != T0)		 /* there was at least one escape */
+			{	T3 = T5->nxt;		 /* start of non-escapes */
+				T5->nxt = (Trans *) 0;	 /* separate */
+				Tx = T0;		 /* start of the escapes */
+				Ty = T5;		 /* its tail */
+				T0 = T3;		 /* the rest, to be reversed */
+			}
+			/* T0 points to first non-escape, Tx to the list of escapes, Ty to its tail */
+
+			/* first tail-add non-escape transitions, reversed */
 			T3 = (Trans *) 0;
-			for (T0 = trans[n][i]; T0; T0 = T4)
-			{	T4 = T0->nxt;
-				if (strcmp(T0->tp, "else") == 0)
-				{	T3 = T0;
-					T0->nxt = (Trans *) 0;
+			for (T5 = T0; T5; T5 = T4)
+			{	T4 = T5->nxt;
+#ifdef HAS_UNLESS
+				if (T5->e_trans)
+				{	printf("error: cannot happen!\n");
+					continue;
+				}
+#endif
+				if (strcmp(T5->tp, "else") == 0)
+				{	T3 = T5;
+					T5->nxt = (Trans *) 0;
 				} else
-				{	T0->nxt = T1;
-					if (!T1) { T2 = T0; }
-					T1 = T0;
+				{	T5->nxt = T1;
+					if (!T1) { T2 = T5; }
+					T1 = T5;
 			}	}
-			if (T2 && T3) { T2->nxt = T3; }
-			trans[n][i] = T1; /* reversed -- else at end */
+			/* T3 points to a possible else, which is removed from the list */
+			/* T1 points to the reversed list so far (without escapes) */
+			/* T2 points to the tail element -- where the else should go */
+			if (T2 && T3) { T2->nxt = T3; }	/* add else */
+
+			/* add in the escapes, to that they appear at the front */
+			if (Tx && Ty) { Ty->nxt = T1; T1 = Tx; }
+
+			trans[n][i] = T1;
+			/* reversed, with escapes first and else last */
 	}	}
+	if (state_tables && verbose)
+	{	printf("FINAL proctype %s\n", 
+			procname[n]);
+		for (i = 1; i < m; i++)
+		for (T0 = trans[n][i]; T0; T0 = T0->nxt)
+			crack(n, i, T0, srcln);
+	}
 #endif
 }
 void
@@ -645,7 +703,12 @@ tagtable(int n, int m, int is, short srcln[], uchar reach[])
 	reach[is] = 0;
 	if (state_tables)
 	for (z = trans[n][is]; z; z = z->nxt)
-		crack(n, is, z, srcln);
+	{	if (dodot)
+			dot_crack(n, is, z);
+		else
+			crack(n, is, z, srcln);
+	}
+
 	for (z = trans[n][is]; z; z = z->nxt)
 	{
 #ifdef HAS_UNLESS
@@ -671,7 +734,7 @@ dfs_table(int n, int m, int is, short srcln[], uchar reach[], uchar lstate[])
 	{	if ((reach[is] & (8|16)) == 16)	/* on stack, not yet recorded */
 		{	lstate[is] = 1;
 			reach[is] |= 8; /* recorded */
-			if (state_tables)
+			if (state_tables && verbose)
 			{	printf("state %d line %d is a loopstate\n", is, srcln[is]);
 		}	}
 		return;
@@ -719,19 +782,19 @@ crack(int n, int j, Trans *z, short srcln[])
 	}
 #endif
 	printf("]");
-	printf(" [%s%s%s%s%s] line %d => ",
+	printf(" [%s%s%s%s%s] %s:%d => ",
 		z->atom&6?"A":z->atom&32?"D":"-",
 		accpstate[n][j]?"a" :"-",
 		stopstate[n][j]?"e" : "-",
 		progstate[n][j]?"p" : "-",
 		z->atom & 8 ?"L":"G",
-		srcln[j]);
+		PanSource, srcln[j]);
 	for (i = 0; z->tp[i]; i++)
 		if (z->tp[i] == '\n')
 			printf("\\n");
 		else
 			putchar(z->tp[i]);
-	if (z->qu[0])
+	if (verbose && z->qu[0])
 	{	printf("\t[");
 		for (i = 0; i < 6; i++)
 			if (z->qu[i])
@@ -741,6 +804,32 @@ crack(int n, int j, Trans *z, short srcln[])
 	}
 	printf("\n");
 	fflush(stdout);
+}
+/* spin -a m.pml; cc -o pan pan.c; ./pan -D | dot -Tps > foo.ps; ps2pdf foo.ps */
+void
+dot_crack(int n, int j, Trans *z)
+{	int i;
+
+	if (!z) return;
+	printf("	S%d -> S%d  [color=black", j, z->st);
+
+	if (z->atom&6) printf(",style=dashed");
+	else if (z->atom&32) printf(",style=dotted");
+	else if (z->atom&8) printf(",style=solid");
+	else printf(",style=bold");
+
+	printf(",label=\"");
+	for (i = 0; z->tp[i]; i++)
+	{	if (z->tp[i] == '\\'
+		&&  z->tp[i+1] == 'n')
+		{	i++; printf(" ");
+		} else
+		{	putchar(z->tp[i]);
+	}	}
+	printf("\"];\n");
+	if (accpstate[n][j]) printf("  S%d [color=red,style=bold];\n", j);
+	else if (progstate[n][j]) printf("  S%d [color=green,style=bold];\n", j);
+	if (stopstate[n][j]) printf("  S%d [color=blue,style=bold,shape=box];\n", j);
 }
 
 #ifdef VAR_RANGES
