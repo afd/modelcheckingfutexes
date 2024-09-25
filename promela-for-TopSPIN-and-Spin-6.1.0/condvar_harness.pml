@@ -96,7 +96,13 @@ init {
     run Waiter();
 #endif
 #if NUM_WAITERS > 9
-#error "NUM_WAITERS > 9 - edit macros to support more threads"
+    run Waiter();
+#endif
+#if NUM_WAITERS > 10
+    run Waiter();
+#endif
+#if NUM_WAITERS > 11
+#error "NUM_WAITERS > 11 - edit macros to support more threads"
 #endif
     run Signaller();
   }

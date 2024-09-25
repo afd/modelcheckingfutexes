@@ -70,7 +70,13 @@ init {
     run Thread();
 #endif
 #if NUM_THREADS > 10
-#error "NUM_THREADS > 10 - edit macros to support more threads"
+    run Thread();
+#endif
+#if NUM_THREADS > 11
+    run Thread();
+#endif
+#if NUM_THREADS > 12
+#error "NUM_THREADS > 12 - edit macros to support more threads"
 #endif
     run Monitor();
   }
