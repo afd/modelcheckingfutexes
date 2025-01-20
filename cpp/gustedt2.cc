@@ -2,7 +2,7 @@
 
 #define set_locked(VAL)   (0x80000000u | (VAL))
 #define unset_locked(VAL) (0x7FFFFFFFu & (VAL))
-#define is_locked(VAL)  (0x80000000u & (VAL))
+#define is_locked(VAL)    (0x80000000u & (VAL))
 class Mutex {
 public:
   Mutex() : futex_word(0) {}

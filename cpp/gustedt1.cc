@@ -1,7 +1,7 @@
 #define BUSYWAIT 10
 
-#define set_locked(VAL)  (0x80000000u | (VAL))
-#define is_locked(VAL) (0x80000000u & (VAL))
+#define set_locked(VAL) (0x80000000u | (VAL))
+#define is_locked(VAL)  (0x80000000u & (VAL))
 class Mutex {
 public:
   Mutex() : futex_word(0) {}
